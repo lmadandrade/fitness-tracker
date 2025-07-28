@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>View Exercises</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    ul { list-style-type: none; padding: 0; }
+    li { margin-bottom: 10px; border-bottom: 1px solid #ccc; padding: 10px 0; }
+  </style>
+</head>
+<body>
+  <h1>All Exercises</h1>
+  <ul id="exerciseList"></ul>
+
+  <script>
+    async function fetchExercises() {
+      try {
+        const response = await fetch('http://localhost:3000/api/exercises');
+        const exercises = await response.json();
+
+        const list = document.getElementById('exerciseList');
+        list.innerHTML = '';
+
+        exercises.forEach(ex => {
+          const item = document.createElement('li');
+          item.innerHTML = `
+            <strong>${ex.name}</strong> (${ex.muscleGroup})<br>
+            Equipment: ${ex.equipment}<br>
+            Type: ${ex.type}<br>
+            Tags: ${ex.tags?.join(', ') || 'N/A'}<br>
+            Description: ${ex.description || 'N/A'}
+          `;
+          list.appendChild(item);
+        });
+      } catch (err) {
+        document.getElementById('exerciseList').textContent = '❌ Failed to fetch exercises.';
+      }
+    }
+
+    fetchExercises();
+  </script>
+</body>
+</html>

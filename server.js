@@ -35,6 +35,17 @@ app.post('/api/users', async (req, res) => {
   }
 });
 
+// Route to get all users
+app.get('/api/users', async (req, res) => {
+  try {
+    const users = await User.find(); // Fetch all users from the database
+    res.json(users);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch users' });
+  }
+});
+
+
 // Route to create an exercise
 app.post('/api/exercises', async (req, res) => {
   try {
@@ -44,6 +55,17 @@ app.post('/api/exercises', async (req, res) => {
     res.status(400).json({ error: err.message });
   }
 });
+
+// Route to get all exercises
+app.get('/api/exercises', async (req, res) => {
+  try {
+    const exercises = await Exercise.find();
+    res.json(exercises);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch exercises' });
+  }
+});
+
 
 // Route to create a workout schedule
 app.post('/api/schedules', async (req, res) => {
@@ -55,6 +77,17 @@ app.post('/api/schedules', async (req, res) => {
   }
 });
 
+// Route to get all workout schedules
+app.get('/api/schedules', async (req, res) => {
+  try {
+    const schedules = await WorkoutSchedule.find();
+    res.json(schedules);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch workout schedules' });
+  }
+});
+
+
 // Route to create a workout log
 app.post('/api/workouts', async (req, res) => {
   try {
@@ -65,6 +98,17 @@ app.post('/api/workouts', async (req, res) => {
   }
 });
 
+
+app.get('/api/workouts', async (req, res) => {
+  try {
+    const logs = await WorkoutLog.find();
+    res.json(logs);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch workout logs' });
+  }
+});
+
+
 // Route to create a check-in log
 app.post('/api/checkins', async (req, res) => {
   try {
@@ -74,6 +118,17 @@ app.post('/api/checkins', async (req, res) => {
     res.status(400).json({ error: err.message });
   }
 });
+
+// Route to get all check-in logs
+app.get('/api/checkins', async (req, res) => {
+  try {
+    const checkIns = await CheckInLog.find(); // Fetch all check-in entries
+    res.json(checkIns);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch check-in logs' });
+  }
+});
+
 
 // Start server
 app.listen(3000, () => {

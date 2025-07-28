@@ -2,19 +2,156 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Fitness Tracker - Home</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fitness Tracker Dashboard</title>
   <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-  <h1>🏋️ Fitness Tracker</h1>
-  <p>Select what you want to do:</p>
+  <div class="container">
+    <!-- Top Navigation Bar -->
+    <header class="top-nav">
+      <div class="nav-left">
+        <div class="logo">
+          <i class="fas fa-dumbbell"></i>
+          <span>FitTracker</span>
+        </div>
+        <nav class="main-nav">
+          <a href="index.html" class="nav-link active">Home</a>
+        </nav>
+      </div>
+      <div class="nav-right">
+        <div class="user-profile">
+          <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face" alt="User" class="profile-img">
+          <span>Albp</span>
+          <i class="fas fa-chevron-down"></i>
+        </div>
+        <button class="settings-btn" onclick="location.href='settings.html'">
+          <i class="fas fa-cog"></i>
+        </button>
+      </div>
+    </header>
 
-  <ul>
-    <li><a href="userReg.html">➕ Register New User</a></li>
-    <li><a href="exerciseLab.html">💪 Add Exercise</a></li>
-    <li><a href="workoutSchedule.html">📅 Create Workout Schedule</a></li>
-    <li><a href="workoutLog.html">📝 Log a Workout</a></li>
-    <li><a href="checkInLog.html">📸 Check-In</a></li>
-  </ul>
+    <div class="main-content">
+      <!-- Left Sidebar -->
+      <aside class="sidebar">
+        <nav class="sidebar-nav">
+          <ul>
+            <li class="active">
+              <a href="index.html">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+              </a>
+            </li>
+            <li>
+              <a href="workoutLog.html">
+                <i class="fas fa-dumbbell"></i>
+                <span>Workouts</span>
+              </a>
+            </li>
+            <li>
+              <a href="exerciseLab.html">
+                <i class="fas fa-list"></i>
+                <span>Exercises</span>
+              </a>
+            </li>
+            <li>
+              <a href="checkInLog.html">
+                <i class="fas fa-chart-line"></i>
+                <span>Progress</span>
+              </a>
+            </li>
+            <li>
+              <a href="settings.html">
+                <i class="fas fa-user"></i>
+                <span>Settings</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </aside>
+
+      <!-- Main Dashboard -->
+      <main class="dashboard">
+        <div class="dashboard-content">
+          <!-- Log Workout Section -->
+          <section class="workout-section">
+            <button class="start-workout-btn" onclick="location.href='workoutLog.html'">
+              <i class="fas fa-play"></i>
+              LOG WORKOUT
+            </button>
+          </section>
+
+          <!-- Stats Grid -->
+          <section class="stats-grid">
+            <!-- Weekly Stats -->
+            <div class="stats-card">
+              <h3>Weekly Summary</h3>
+              <div class="stats-items">
+                <div class="stat-item">
+                  <span class="stat-number">3</span>
+                  <span class="stat-label">Workouts</span>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-number">125 min</span>
+                  <span class="stat-label">Trained</span>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-number">-0.8 kg</span>
+                  <span class="stat-label">Weight Change</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Upcoming Workouts -->
+            <div class="stats-card">
+              <h3>Upcoming Workouts</h3>
+              <div class="workout-list">
+                <div class="workout-item">
+                  <span class="workout-name">Full Body</span>
+                  <span class="workout-time">Thu 9:00 AM</span>
+                </div>
+                <div class="workout-item">
+                  <span class="workout-name">Upper Body</span>
+                  <span class="workout-time">Thu 10:00 AM</span>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <!-- Right Sidebar -->
+        <aside class="right-sidebar">
+          <!-- Current Weight -->
+          <div class="weight-card">
+            <h3>Current Weight</h3>
+            <div class="weight-display">
+              <span class="weight-number">72</span>
+              <span class="weight-unit">kg</span>
+            </div>
+          </div>
+
+          <!-- Recent Activity -->
+          <div class="activity-card">
+            <h3>Recent Activity</h3>
+            <div class="activity-list">
+              <div class="activity-item">
+                <span class="activity-name">Workout: Upper Body</span>
+                <span class="activity-time">2 days ago</span>
+              </div>
+              <div class="activity-item">
+                <span class="activity-name">Exercise: Bulgarian Split Squat</span>
+                <span class="activity-time">3 days ago</span>
+              </div>
+              <div class="activity-item">
+                <span class="activity-name">Check-In: Mood - Motivated</span>
+                <span class="activity-time">3 days ago</span>
+              </div>
+            </div>
+          </div>
+        </aside>
+      </main>
+    </div>
+  </div>
 </body>
 </html>

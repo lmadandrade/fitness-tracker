@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>View All Users</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h1>Registered Users</h1>
+  <ul id="userList"></ul>
+
+  <script>
+    async function fetchUsers() {
+      try {
+        const response = await fetch('http://localhost:3000/api/users');
+        const users = await response.json();
+
+        const list = document.getElementById('userList');
+        list.innerHTML = '';
+
+        users.forEach(user => {
+          const li = document.createElement('li');
+          li.textContent = `${user.name} (${user.email}) — Age: ${user.age}, Level: ${user.experienceLevel}`;
+          list.appendChild(li);
+        });
+      } catch (err) {
+        document.getElementById('userList').textContent = '❌ Failed to load users.';
+      }
+    }
+
+    fetchUsers();
+  </script>
+</body>
+</html>
