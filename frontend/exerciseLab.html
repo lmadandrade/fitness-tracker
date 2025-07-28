@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Add New Exercise</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Add New Exercise</h1>
+  <form id="exerciseForm">
+    <input type="text" name="name" placeholder="Exercise Name" required />
+    <input type="text" name="muscleGroup" placeholder="Muscle Group (e.g., Chest)" required />
+    <input type="text" name="equipment" placeholder="Equipment (e.g., Barbell)" required />
+
+    <select name="type" required>
+      <option value="">Select Type</option>
+      <option value="compound">Compound</option>
+      <option value="isolation">Isolation</option>
+      <option value="cardio">Cardio</option>
+      <option value="stretch">Stretch</option>
+    </select>
+
+    <textarea name="description" placeholder="Description (optional)"></textarea>
+
+    <input type="text" name="tags" placeholder="Tags (comma separated e.g., strength,core)" />
+
+    <button type="submit">Submit</button>
+  </form>
+
+  <p id="message"></p>
+
+  <script src="exerciseLab.js"></script>
+</body>
+</html>

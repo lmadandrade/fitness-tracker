@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Workout Schedule</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Create Workout Schedule</h1>
+
+  <form id="scheduleForm">
+    <input type="text" name="userId" placeholder="User ID" required />
+    <input type="text" name="scheduleTitle" placeholder="Schedule Title (optional)" />
+    
+    <select name="dayOfWeek" required>
+      <option value="">Select Day</option>
+      <option value="Monday">Monday</option>
+      <option value="Tuesday">Tuesday</option>
+      <option value="Wednesday">Wednesday</option>
+      <option value="Thursday">Thursday</option>
+      <option value="Friday">Friday</option>
+      <option value="Saturday">Saturday</option>
+      <option value="Sunday">Sunday</option>
+    </select>
+
+    <input type="text" name="exerciseId" placeholder="Exercise ID" required />
+    <input type="number" name="sets" placeholder="Sets" required />
+    <input type="number" name="reps" placeholder="Reps" required />
+    <input type="number" name="targetWeight" placeholder="Target Weight (kg)" required />
+    <input type="number" name="restInterval" placeholder="Rest Interval (seconds)" />
+    <input type="number" name="duration" placeholder="Cardio Duration (minutes)" />
+
+    <button type="submit">Create Schedule</button>
+  </form>
+
+  <p id="message"></p>
+
+  <script src="workoutSchedule.js"></script>
+</body>
+</html>

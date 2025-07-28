@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Log Workout</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Log Workout</h1>
+  <form id="logForm">
+    <input type="text" name="userId" placeholder="User ID" required />
+    <input type="date" name="date" required />
+    <input type="text" name="scheduledWorkoutId" placeholder="Scheduled Workout ID (optional)" />
+    <input type="number" name="duration" placeholder="Total Duration (minutes)" />
+    <select name="wasSkipped">
+      <option value="">Was it skipped?</option>
+      <option value="true">Yes</option>
+      <option value="false">No</option>
+    </select>
+    <input type="number" name="rpe" placeholder="Intensity (1-10)" />
+    
+    <h3>Exercise Performed</h3>
+    <input type="text" name="exerciseId" placeholder="Exercise ID" />
+    <input type="number" name="setsPerformed" placeholder="Sets Performed" />
+    <input type="number" name="repsPerformed" placeholder="Reps Performed" />
+    <input type="number" name="actualWeight" placeholder="Weight Used" />
+    <input type="number" name="restInterval" placeholder="Rest Time (sec)" />
+    <input type="number" name="exerciseDuration" placeholder="Duration (min for cardio)" />
+    <input type="text" name="notes" placeholder="Notes (optional)" />
+
+    <button type="submit">Log Workout</button>
+  </form>
+  <p id="message"></p>
+  <script src="workoutLog.js"></script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Fitness Tracker - Check-In</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h1>Check-In Log</h1>
+  <form id="checkInForm">
+    <input type="text" name="userId" placeholder="User ID" required />
+    <input type="date" name="date" required />
+    <input type="number" name="energyLevel" placeholder="Energy Level (1–10)" min="1" max="10" />
+    <input type="text" name="mood" placeholder="Mood (e.g., happy 😊)" />
+    <input type="number" name="bodyWeight" placeholder="Weight (kg)" />
+
+    <h3>Muscle Measurements (cm)</h3>
+    <input type="number" name="chest" placeholder="Chest" />
+    <input type="number" name="waist" placeholder="Waist" />
+    <input type="number" name="arms" placeholder="Arms" />
+    <input type="number" name="thighs" placeholder="Thighs" />
+    <input type="number" name="shoulders" placeholder="Shoulders" />
+    <input type="number" name="calves" placeholder="Calves" />
+
+    <input type="text" name="progressPhotoUrl" placeholder="Photo URL (optional)" />
+    <textarea name="note" placeholder="Note (optional)"></textarea>
+
+    <button type="submit">Submit Check-In</button>
+  </form>
+
+  <p id="message"></p>
+
+  <script src="checkInLog.js"></script>
+</body>
+</html>
