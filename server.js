@@ -77,6 +77,8 @@ app.post('/api/schedules', async (req, res) => {
   }
 });
 
+
+
 // Route to get all workout schedules
 app.get('/api/schedules', async (req, res) => {
   try {
@@ -87,6 +89,15 @@ app.get('/api/schedules', async (req, res) => {
   }
 });
 
+app.get('/api/schedules/:id', async (req, res) => {
+  try {
+    const schedule = await WorkoutSchedule.findOne({ scheduleId: req.params.id });
+    if (!schedule) return res.status(404).json({ error: 'Schedule not found' });
+    res.json(schedule);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch schedule' });
+  }
+});
 
 // Route to create a workout log
 app.post('/api/workouts', async (req, res) => {
