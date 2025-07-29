@@ -16,10 +16,6 @@
           <i class="fas fa-dumbbell"></i>
           <span>FitTracker</span>
         </div>
-        <nav class="main-nav">
-          <a href="index.html" class="nav-link">Home</a>
-          <a href="workouts.html" class="nav-link active">Workouts</a>
-        </nav>
       </div>
       <div class="nav-right">
         <div class="user-profile">
@@ -50,7 +46,7 @@
       <!-- Main Dashboard -->
       <main class="dashboard">
         <div class="dashboard-content">
-          <!-- Log Workout Button -->
+          <!-- Quick Action Section -->
           <section class="workout-section">
             <button class="start-workout-btn" onclick="location.href='workoutLog.html'">
               <i class="fas fa-play"></i>
@@ -58,24 +54,50 @@
             </button>
           </section>
 
-          <!-- Options to View or Create Plans -->
+          <!-- Workout Management Options -->
           <section class="stats-grid">
             <!-- Create Workout Plan -->
             <div class="stats-card">
-              <h3>Create Workout Plan</h3>
-              <p>Set up your weekly workout schedule.</p>
-              <button class="start-workout-btn" style="height: auto; padding: 16px; font-size: 18px;" onclick="location.href='workoutSchedule.html'">
-                <i class="fas fa-calendar-plus"></i> Plan a Workout
-              </button>
+              <h3><i class="fas fa-calendar-plus"></i> Create Workout Plan</h3>
+              <p>Set up your weekly workout schedule with custom exercises and timing.</p>
+              <div style="margin-top: 20px;">
+                <button class="start-workout-btn" onclick="location.href='workoutSchedule.html'">
+                  <i class="fas fa-calendar-plus"></i> Plan a Workout
+                </button>
+              </div>
             </div>
 
-            <!-- View Upcoming Workouts -->
+            <!-- View Workout Plans -->
             <div class="stats-card">
-              <h3>Your Workout Plans</h3>
-              <p>See and manage your scheduled workouts.</p>
-              <button class="start-workout-btn" style="height: auto; padding: 16px; font-size: 18px;" onclick="location.href='tempViewWorkoutSchedules.html'">
-                <i class="fas fa-calendar-alt"></i> View Plans
-              </button>
+              <h3><i class="fas fa-calendar-alt"></i> Your Workout Plans</h3>
+              <p>View and manage your scheduled workouts, track your weekly routine.</p>
+              <div style="margin-top: 20px;">
+                <button class="start-workout-btn" onclick="location.href='tempViewWorkoutSchedules.html'">
+                  <i class="fas fa-calendar-alt"></i> View Plans
+                </button>
+              </div>
+            </div>
+
+            <!-- Exercise Library -->
+            <div class="stats-card">
+              <h3><i class="fas fa-list"></i> Exercise Library</h3>
+              <p>Browse and add new exercises to your personal workout library.</p>
+              <div style="margin-top: 20px;">
+                <button class="start-workout-btn" onclick="location.href='exerciseLab.html'">
+                  <i class="fas fa-plus"></i> Add Exercise
+                </button>
+              </div>
+            </div>
+
+            <!-- Progress Tracking -->
+            <div class="stats-card">
+              <h3><i class="fas fa-chart-line"></i> Track Progress</h3>
+              <p>Log your daily check-ins, measurements, and track your fitness journey.</p>
+              <div style="margin-top: 20px;">
+                <button class="start-workout-btn" onclick="location.href='checkInLog.html'">
+                  <i class="fas fa-clipboard-check"></i> Check-In
+                </button>
+              </div>
             </div>
           </section>
         </div>
@@ -83,7 +105,7 @@
         <!-- Right Sidebar -->
         <aside class="right-sidebar">
           <div class="weight-card">
-            <h3>Current Weight</h3>
+            <h3><i class="fas fa-weight"></i> Current Weight</h3>
             <div class="weight-display">
               <span class="weight-number">72</span>
               <span class="weight-unit">kg</span>
@@ -91,7 +113,7 @@
           </div>
 
           <div class="activity-card">
-            <h3>Recent Workouts</h3>
+            <h3><i class="fas fa-history"></i> Recent Workouts</h3>
             <div class="activity-list">
               <div class="activity-item">
                 <span class="activity-name">Full Body</span>
@@ -107,9 +129,28 @@
               </div>
             </div>
           </div>
+
+          <div class="activity-card">
+            <h3><i class="fas fa-target"></i> This Week's Goals</h3>
+            <div class="activity-list">
+              <div class="activity-item">
+                <span class="activity-name">3 Workouts</span>
+                <span class="activity-time">2/3 Done</span>
+              </div>
+              <div class="activity-item">
+                <span class="activity-name">150 Minutes</span>
+                <span class="activity-time">125/150</span>
+              </div>
+              <div class="activity-item">
+                <span class="activity-name">Daily Check-ins</span>
+                <span class="activity-time">5/7 Days</span>
+              </div>
+            </div>
+          </div>
         </aside>
       </main>
     </div>
   </div>
 </body>
 </html>
+

@@ -1,40 +1,145 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Workout Schedule</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <title>Create Workout Schedule - FitTracker</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-  <h1>Create Workout Schedule</h1>
+  <div class="container">
+    <!-- Top Navigation Bar -->
+    <header class="top-nav">
+      <div class="nav-left">
+        <div class="logo">
+          <i class="fas fa-dumbbell"></i>
+          <span>FitTracker</span>
+        </div>
+      </div>
+      <div class="nav-right">
+        <div class="user-profile">
+          <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face" alt="User" class="profile-img">
+          <span>Albp</span>
+          <i class="fas fa-chevron-down"></i>
+        </div>
+        <button class="settings-btn" onclick="location.href='settings.html'">
+          <i class="fas fa-cog"></i>
+        </button>
+      </div>
+    </header>
 
-  <form id="scheduleForm">
-    <input type="text" name="userId" placeholder="User ID" required />
-    <input type="text" name="scheduleTitle" placeholder="Schedule Title (optional)" />
-    
-    <select name="dayOfWeek" required>
-      <option value="">Select Day</option>
-      <option value="Monday">Monday</option>
-      <option value="Tuesday">Tuesday</option>
-      <option value="Wednesday">Wednesday</option>
-      <option value="Thursday">Thursday</option>
-      <option value="Friday">Friday</option>
-      <option value="Saturday">Saturday</option>
-      <option value="Sunday">Sunday</option>
-    </select>
+    <div class="main-content">
+      <!-- Left Sidebar -->
+      <aside class="sidebar">
+        <nav class="sidebar-nav">
+          <ul>
+            <li><a href="index.html"><i class="fas fa-home"></i><span>Home</span></a></li>
+            <li class="active"><a href="workouts.html"><i class="fas fa-dumbbell"></i><span>Workouts</span></a></li>
+            <li><a href="exerciseLab.html"><i class="fas fa-list"></i><span>Exercises</span></a></li>
+            <li><a href="checkInLog.html"><i class="fas fa-chart-line"></i><span>Progress</span></a></li>
+            <li><a href="settings.html"><i class="fas fa-user"></i><span>Settings</span></a></li>
+          </ul>
+        </nav>
+      </aside>
 
-    <input type="text" name="exerciseId" placeholder="Exercise ID" required />
-    <input type="number" name="sets" placeholder="Sets" required />
-    <input type="number" name="reps" placeholder="Reps" required />
-    <input type="number" name="targetWeight" placeholder="Target Weight (kg)" required />
-    <input type="number" name="restInterval" placeholder="Rest Interval (seconds)" />
-    <input type="number" name="duration" placeholder="Cardio Duration (minutes)" />
+      <!-- Main Dashboard -->
+      <main class="dashboard">
+        <div class="dashboard-content">
+          <div class="page-header">
+            <div class="header-content">
+              <h1><i class="fas fa-calendar-plus"></i> Create Workout Schedule</h1>
+              <p>Plan your weekly workouts with custom exercises and set your routine</p>
+            </div>
+            <div class="header-actions">
+              <button class="secondary-btn" onclick="location.href='workouts.html'">
+                <i class="fas fa-arrow-left"></i> Back to Workouts
+              </button>
+            </div>
+          </div>
 
-    <button type="submit">Create Schedule</button>
-  </form>
+          <form id="scheduleForm" class="workout-form">
+            <!-- Schedule Details -->
+            <section class="form-section">
+              <div class="section-header">
+                <h2><i class="fas fa-info-circle"></i> Schedule Details</h2>
+              </div>
+              <div class="form-card">
+                <div class="form-grid">
+                  <div class="form-group">
+                    <label for="userId">User ID</label>
+                    <input type="text" name="userId" id="userId" placeholder="Enter your user ID" required />
+                    <small>Your unique user identifier</small>
+                  </div>
 
-  <p id="message"></p>
+                  <div class="form-group">
+                    <label for="scheduleTitle">Schedule Title</label>
+                    <input type="text" name="scheduleTitle" id="scheduleTitle" placeholder="e.g., Push Day, Leg Day, Full Body" />
+                    <small>Give your workout a descriptive name</small>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="dayOfWeek">Day of the Week</label>
+                    <select name="dayOfWeek" id="dayOfWeek" required>
+                      <option value="">Select Day</option>
+                      <option value="Monday">Monday</option>
+                      <option value="Tuesday">Tuesday</option>
+                      <option value="Wednesday">Wednesday</option>
+                      <option value="Thursday">Thursday</option>
+                      <option value="Friday">Friday</option>
+                      <option value="Saturday">Saturday</option>
+                      <option value="Sunday">Sunday</option>
+                    </select>
+                    <small>Choose which day this workout will be scheduled</small>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <!-- Exercise Planning -->
+            <section class="form-section">
+              <div class="section-header">
+                <h2><i class="fas fa-dumbbell"></i> Exercise Planning</h2>
+              </div>
+              
+              <div id="exerciseList">
+                <!-- Exercise blocks will be added here -->
+              </div>
+
+              <div class="add-exercise-container">
+                <p class="add-exercise-text">Add exercises to build your workout routine</p>
+                <button type="button" class="add-exercise-btn" onclick="addExerciseBlock()">
+                  <i class="fas fa-plus"></i> Add Exercise
+                </button>
+              </div>
+            </section>
+
+            <!-- Submit Section -->
+            <section class="form-section">
+              <div class="submit-section">
+                <div class="submit-info">
+                  <h3>Ready to save your workout schedule?</h3>
+                  <p>Your workout plan will be saved and available for logging sessions. You can always edit it later.</p>
+                </div>
+                <div class="submit-actions">
+                  <button type="button" class="secondary-btn" onclick="document.getElementById('scheduleForm').reset(); resetExercises();">
+                    <i class="fas fa-undo"></i> Reset Form
+                  </button>
+                  <button type="submit" class="submit-btn">
+                    <i class="fas fa-save"></i> Save Schedule
+                  </button>
+                </div>
+              </div>
+            </section>
+          </form>
+
+          <p id="message" class="message-container"></p>
+        </div>
+      </main>
+    </div>
+  </div>
 
   <script src="workoutSchedule.js"></script>
 </body>
 </html>
+

@@ -2,34 +2,170 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Fitness Tracker - Check-In</title>
+  <title>Check-In Log - FitTracker</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
 </head>
 <body>
-  <h1>Check-In Log</h1>
-  <form id="checkInForm">
-    <input type="text" name="userId" placeholder="User ID" required />
-    <input type="date" name="date" required />
-    <input type="number" name="energyLevel" placeholder="Energy Level (1–10)" min="1" max="10" />
-    <input type="text" name="mood" placeholder="Mood (e.g., happy 😊)" />
-    <input type="number" name="bodyWeight" placeholder="Weight (kg)" />
+  <div class="container">
+    <!-- Top Navigation Bar -->
+    <header class="top-nav">
+      <div class="nav-left">
+        <div class="logo">
+          <i class="fas fa-dumbbell"></i>
+          <span>FitTracker</span>
+        </div>
+      </div>
+      <div class="nav-right">
+        <div class="user-profile">
+          <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face" alt="User" class="profile-img" />
+          <span>Albp</span>
+          <i class="fas fa-chevron-down"></i>
+        </div>
+        <button class="settings-btn" onclick="location.href='settings.html'">
+          <i class="fas fa-cog"></i>
+        </button>
+      </div>
+    </header>
 
-    <h3>Muscle Measurements (cm)</h3>
-    <input type="number" name="chest" placeholder="Chest" />
-    <input type="number" name="waist" placeholder="Waist" />
-    <input type="number" name="arms" placeholder="Arms" />
-    <input type="number" name="thighs" placeholder="Thighs" />
-    <input type="number" name="shoulders" placeholder="Shoulders" />
-    <input type="number" name="calves" placeholder="Calves" />
+    <div class="main-content">
+      <!-- Left Sidebar -->
+      <aside class="sidebar">
+        <nav class="sidebar-nav">
+          <ul>
+            <li><a href="index.html"><i class="fas fa-home"></i><span>Home</span></a></li>
+            <li><a href="workouts.html"><i class="fas fa-dumbbell"></i><span>Workouts</span></a></li>
+            <li><a href="exerciseLab.html"><i class="fas fa-list"></i><span>Exercises</span></a></li>
+            <li class="active"><a href="checkInLog.html"><i class="fas fa-chart-line"></i><span>Progress</span></a></li>
+            <li><a href="settings.html"><i class="fas fa-user"></i><span>Settings</span></a></li>
+          </ul>
+        </nav>
+      </aside>
 
-    <input type="text" name="progressPhotoUrl" placeholder="Photo URL (optional)" />
-    <textarea name="note" placeholder="Note (optional)"></textarea>
+      <!-- Main Dashboard -->
+      <main class="dashboard">
+        <div class="dashboard-content">
+          <!-- Page Header -->
+          <div class="page-header">
+            <div class="header-content">
+              <h1><i class="fas fa-clipboard-check"></i> Check-In Log</h1>
+              <p>Track your fitness progress and mood over time</p>
+            </div>
+            <div class="header-actions">
+              <button class="secondary-btn" onclick="location.href='index.html'">
+                <i class="fas fa-arrow-left"></i> Back to Home
+              </button>
+            </div>
+          </div>
 
-    <button type="submit">Submit Check-In</button>
-  </form>
+          <!-- Check-In Form -->
+          <form id="checkInForm" class="form-card">
+            <!-- Basic Information -->
+            <div class="form-section">
+              <div class="section-header">
+                <h2><i class="fas fa-info-circle"></i> Basic Information</h2>
+              </div>
+              <div class="form-grid">
+                <div class="form-group">
+                  <label for="userId">User ID</label>
+                  <input type="text" name="userId" id="userId" placeholder="Enter your user ID" required />
+                </div>
 
-  <p id="message"></p>
+                <div class="form-group">
+                  <label for="date">Date</label>
+                  <input type="date" name="date" id="date" required />
+                </div>
+
+                <div class="form-group">
+                  <label for="energyLevel">Energy Level (1–10)</label>
+                  <input type="number" name="energyLevel" id="energyLevel" min="1" max="10" placeholder="Rate your energy" />
+                </div>
+
+                <div class="form-group">
+                  <label for="mood">Mood</label>
+                  <input type="text" name="mood" id="mood" placeholder="e.g., Motivated 😎" />
+                </div>
+
+                <div class="form-group">
+                  <label for="bodyWeight">Weight (kg)</label>
+                  <input type="number" name="bodyWeight" id="bodyWeight" step="0.1" placeholder="Your current weight" />
+                </div>
+              </div>
+            </div>
+
+            <!-- Muscle Measurements -->
+            <div class="form-section">
+              <div class="section-header">
+                <h2><i class="fas fa-ruler-combined"></i> Body Measurements (cm)</h2>
+              </div>
+              <div class="form-grid">
+                <div class="form-group">
+                  <label for="chest">Chest</label>
+                  <input type="number" name="chest" id="chest" step="0.1" placeholder="Chest circumference" />
+                </div>
+                <div class="form-group">
+                  <label for="waist">Waist</label>
+                  <input type="number" name="waist" id="waist" step="0.1" placeholder="Waist circumference" />
+                </div>
+                <div class="form-group">
+                  <label for="arms">Arms</label>
+                  <input type="number" name="arms" id="arms" step="0.1" placeholder="Arm circumference" />
+                </div>
+                <div class="form-group">
+                  <label for="thighs">Thighs</label>
+                  <input type="number" name="thighs" id="thighs" step="0.1" placeholder="Thigh circumference" />
+                </div>
+                <div class="form-group">
+                  <label for="shoulders">Shoulders</label>
+                  <input type="number" name="shoulders" id="shoulders" step="0.1" placeholder="Shoulder width" />
+                </div>
+                <div class="form-group">
+                  <label for="calves">Calves</label>
+                  <input type="number" name="calves" id="calves" step="0.1" placeholder="Calf circumference" />
+                </div>
+              </div>
+            </div>
+
+            <!-- Additional Information -->
+            <div class="form-section">
+              <div class="section-header">
+                <h2><i class="fas fa-camera"></i> Additional Information</h2>
+              </div>
+              <div class="form-group">
+                <label for="progressPhotoUrl">Progress Photo (URL)</label>
+                <input type="text" name="progressPhotoUrl" id="progressPhotoUrl" placeholder="Optional image URL" />
+                <small>Add a link to your progress photo</small>
+              </div>
+
+              <div class="form-group">
+                <label for="note">Notes (optional)</label>
+                <textarea name="note" id="note" placeholder="How did the day go? Any struggles or wins? Share your thoughts..."></textarea>
+                <small>Reflect on your day, challenges, achievements, or goals</small>
+              </div>
+            </div>
+
+            <!-- Submit Section -->
+            <div class="submit-section">
+              <div class="submit-info">
+                <h3>Ready to log your check-in?</h3>
+                <p>Your data will be saved to your progress history and help track your fitness journey.</p>
+              </div>
+              <div class="submit-actions">
+                <button type="submit" class="submit-btn">
+                  <i class="fas fa-check-circle"></i> Submit Check-In
+                </button>
+              </div>
+            </div>
+
+            <p id="message" class="message-container"></p>
+          </form>
+        </div>
+      </main>
+    </div>
+  </div>
 
   <script src="checkInLog.js"></script>
 </body>
 </html>
+

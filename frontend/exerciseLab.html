@@ -1,34 +1,146 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Add New Exercise</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <title>Add New Exercise - FitTracker</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
 </head>
 <body>
-  <h1>Add New Exercise</h1>
-  <form id="exerciseForm">
-    <input type="text" name="name" placeholder="Exercise Name" required />
-    <input type="text" name="muscleGroup" placeholder="Muscle Group (e.g., Chest)" required />
-    <input type="text" name="equipment" placeholder="Equipment (e.g., Barbell)" required />
+  <div class="container">
+    <!-- Top Navigation Bar -->
+    <header class="top-nav">
+      <div class="nav-left">
+        <div class="logo">
+          <i class="fas fa-dumbbell"></i>
+          <span>FitTracker</span>
+        </div>
+      </div>
+      <div class="nav-right">
+        <div class="user-profile">
+          <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face" alt="User" class="profile-img" />
+          <span>Albp</span>
+          <i class="fas fa-chevron-down"></i>
+        </div>
+        <button class="settings-btn" onclick="location.href='settings.html'">
+          <i class="fas fa-cog"></i>
+        </button>
+      </div>
+    </header>
 
-    <select name="type" required>
-      <option value="">Select Type</option>
-      <option value="compound">Compound</option>
-      <option value="isolation">Isolation</option>
-      <option value="cardio">Cardio</option>
-      <option value="stretch">Stretch</option>
-    </select>
+    <div class="main-content">
+      <!-- Left Sidebar -->
+      <aside class="sidebar">
+        <nav class="sidebar-nav">
+          <ul>
+            <li><a href="index.html"><i class="fas fa-home"></i><span>Home</span></a></li>
+            <li><a href="workouts.html"><i class="fas fa-dumbbell"></i><span>Workouts</span></a></li>
+            <li class="active"><a href="exerciseLab.html"><i class="fas fa-list"></i><span>Exercises</span></a></li>
+            <li><a href="checkInLog.html"><i class="fas fa-chart-line"></i><span>Progress</span></a></li>
+            <li><a href="settings.html"><i class="fas fa-user"></i><span>Settings</span></a></li>
+          </ul>
+        </nav>
+      </aside>
 
-    <textarea name="description" placeholder="Description (optional)"></textarea>
+      <!-- Main Dashboard -->
+      <main class="dashboard">
+        <div class="dashboard-content">
+          <!-- Page Header -->
+          <div class="page-header">
+            <div class="header-content">
+              <h1><i class="fas fa-plus-circle"></i> Add New Exercise</h1>
+              <p>Create and save a new exercise to your personal library</p>
+            </div>
+            <div class="header-actions">
+              <button class="secondary-btn" onclick="location.href='workouts.html'">
+                <i class="fas fa-arrow-left"></i> Back to Workouts
+              </button>
+            </div>
+          </div>
 
-    <input type="text" name="tags" placeholder="Tags (comma separated e.g., strength,core)" />
+          <!-- Exercise Form -->
+          <form id="exerciseForm" class="form-card">
+            <!-- Basic Exercise Information -->
+            <div class="form-section">
+              <div class="section-header">
+                <h2><i class="fas fa-info-circle"></i> Exercise Details</h2>
+              </div>
+              <div class="form-grid">
+                <div class="form-group">
+                  <label for="name">Exercise Name</label>
+                  <input type="text" name="name" id="name" placeholder="e.g., Bench Press" required />
+                  <small>Enter a clear, descriptive name for the exercise</small>
+                </div>
 
-    <button type="submit">Submit</button>
-  </form>
+                <div class="form-group">
+                  <label for="muscleGroup">Primary Muscle Group</label>
+                  <input type="text" name="muscleGroup" id="muscleGroup" placeholder="e.g., Chest" required />
+                  <small>Main muscle group targeted by this exercise</small>
+                </div>
 
-  <p id="message"></p>
+                <div class="form-group">
+                  <label for="equipment">Equipment Required</label>
+                  <input type="text" name="equipment" id="equipment" placeholder="e.g., Barbell" required />
+                  <small>Equipment needed to perform this exercise</small>
+                </div>
+
+                <div class="form-group">
+                  <label for="type">Exercise Type</label>
+                  <select name="type" id="type" required>
+                    <option value="">Select Exercise Type</option>
+                    <option value="compound">Compound Movement</option>
+                    <option value="isolation">Isolation Exercise</option>
+                    <option value="cardio">Cardiovascular</option>
+                    <option value="stretch">Stretching/Mobility</option>
+                  </select>
+                  <small>Choose the category that best describes this exercise</small>
+                </div>
+
+                <div class="form-group">
+                  <label for="tags">Tags (optional)</label>
+                  <input type="text" name="tags" id="tags" placeholder="e.g., strength, core, beginner" />
+                  <small>Add tags to help categorize and find this exercise later</small>
+                </div>
+              </div>
+            </div>
+
+            <!-- Exercise Description -->
+            <div class="form-section">
+              <div class="section-header">
+                <h2><i class="fas fa-file-text"></i> Exercise Description</h2>
+              </div>
+              <div class="form-group">
+                <label for="description">Instructions & Notes (optional)</label>
+                <textarea name="description" id="description" placeholder="Describe how to perform this exercise, including setup, form cues, and any important safety notes..."></textarea>
+                <small>Provide detailed instructions for proper form and execution</small>
+              </div>
+            </div>
+
+            <!-- Submit Section -->
+            <div class="submit-section">
+              <div class="submit-info">
+                <h3>Ready to save this exercise?</h3>
+                <p>This exercise will be added to your personal library and available for use in workouts.</p>
+              </div>
+              <div class="submit-actions">
+                <button type="button" class="secondary-btn" onclick="document.getElementById('exerciseForm').reset()">
+                  <i class="fas fa-undo"></i> Reset Form
+                </button>
+                <button type="submit" class="submit-btn">
+                  <i class="fas fa-save"></i> Save Exercise
+                </button>
+              </div>
+            </div>
+
+            <p id="message" class="message-container"></p>
+          </form>
+        </div>
+      </main>
+    </div>
+  </div>
 
   <script src="exerciseLab.js"></script>
 </body>
 </html>
+

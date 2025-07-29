@@ -16,10 +16,6 @@
           <i class="fas fa-dumbbell"></i>
           <span>FitTracker</span>
         </div>
-        <nav class="main-nav">
-          <a href="index.html" class="nav-link">Home</a>
-          <a href="workouts.html" class="nav-link active">Workouts</a>
-        </nav>
       </div>
       <div class="nav-right">
         <div class="user-profile">
@@ -49,7 +45,7 @@
 
       <!-- Main Dashboard -->
       <main class="dashboard">
-        <div class="dashboard-content log-workout-content">
+        <div class="dashboard-content">
           <!-- Page Header -->
           <div class="page-header">
             <div class="header-content">
@@ -68,33 +64,39 @@
             <!-- Basic Information Section -->
             <section class="form-section">
               <div class="section-header">
-                <h2><i class="fas fa-info-circle"></i> Basic Information</h2>
+                <h2><i class="fas fa-info-circle"></i> Workout Information</h2>
               </div>
               <div class="form-card">
                 <div class="form-grid">
                   <div class="form-group">
                     <label for="userName">User</label>
-                    <select id="userName" required></select>
+                    <select id="userName" required>
+                      <option value="">Select User</option>
+                    </select>
                     <input type="hidden" id="userIdHidden" name="userId" />
+                    <small>Choose the user for this workout</small>
                   </div>
                   <div class="form-group">
                     <label for="date">Workout Date</label>
                     <input type="date" name="date" id="date" required />
+                    <small>Date when the workout was performed</small>
                   </div>
                   <div class="form-group">
                     <label for="scheduledWorkoutId">Scheduled Workout</label>
                     <select name="scheduledWorkoutId" id="scheduledWorkoutId">
-                      <option value="">None (Free workout )</option>
+                      <option value="">None (Free workout)</option>
                     </select>
                     <small>Optional: Select if this was a scheduled workout</small>
                   </div>
                   <div class="form-group">
                     <label for="startTime">Start Time</label>
                     <input type="time" name="startTime" id="startTime" required />
+                    <small>When did you start your workout?</small>
                   </div>
                   <div class="form-group">
                     <label for="endTime">End Time</label>
                     <input type="time" name="endTime" id="endTime" required />
+                    <small>When did you finish your workout?</small>
                   </div>
                   <div class="form-group">
                     <label for="wasSkipped">Workout Status</label>
@@ -102,6 +104,7 @@
                       <option value="false">Completed</option>
                       <option value="true">Skipped</option>
                     </select>
+                    <small>Did you complete or skip this workout?</small>
                   </div>
                   <div class="form-group">
                     <label for="rpe">Intensity Level (RPE)</label>
@@ -123,7 +126,7 @@
                 <h2><i class="fas fa-dumbbell"></i> Exercise Performance</h2>
               </div>
               <div class="exercise-layout">
-                <div class="exercise-card scheduled-card">
+                <div class="exercise-card">
                   <div class="card-header">
                     <h3><i class="fas fa-calendar-alt"></i> Scheduled Exercises</h3>
                     <span class="card-badge">Reference</span>
@@ -135,7 +138,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="exercise-card performance-card">
+                <div class="exercise-card">
                   <div class="card-header">
                     <h3><i class="fas fa-edit"></i> Actual Performance</h3>
                     <span class="card-badge primary">Input</span>
@@ -152,14 +155,8 @@
                     </div>
                   </div>
                   <div class="card-actions" id="exerciseActions" style="display: none;">
-                    <button type="button" class="action-btn confirm" onclick="confirmExercise()">
-                      <i class="fas fa-check"></i> Confirm Exercise
-                    </button>
-                    <button type="button" class="action-btn skip" onclick="skipExercise()">
-                      <i class="fas fa-forward"></i> Skip Exercise
-                    </button>
                     <button type="button" class="action-btn add" onclick="addExercise()">
-                      <i class="fas fa-plus"></i> Add Another
+                      <i class="fas fa-plus"></i> Add Another Exercise
                     </button>
                   </div>
                 </div>
@@ -171,7 +168,7 @@
               <div class="submit-section">
                 <div class="submit-info">
                   <h3>Ready to save your workout?</h3>
-                  <p>Make sure all exercise details are correct before submitting.</p>
+                  <p>Make sure all exercise details are correct before submitting. Your workout data will be saved to your progress history.</p>
                 </div>
                 <div class="submit-actions">
                   <button type="button" class="secondary-btn" onclick="resetForm()">
@@ -191,11 +188,6 @@
   </div>
 
   <script src="workoutLog.js"></script>
-  <script>
-    document.getElementById('rpe').addEventListener('input', function () {
-      document.getElementById('rpeValue').textContent = this.value;
-    });
-    document.getElementById('date').valueAsDate = new Date();
-  </script>
 </body>
 </html>
+

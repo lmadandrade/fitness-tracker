@@ -4,6 +4,8 @@ document.addEventListener('DOMContentLoaded', () => {
   populateSchedules();
   setToday();
   handleSkipToggle();
+  setupRPE();
+  setupFormSubmit();
 });
 
 function setToday() {
@@ -11,9 +13,19 @@ function setToday() {
   document.getElementById('date').value = today;
 }
 
+function setupRPE() {
+  const rpeInput = document.getElementById('rpe');
+  const rpeValue = document.getElementById('rpeValue');
+  if (rpeInput && rpeValue) {
+    rpeInput.addEventListener('input', () => {
+      rpeValue.textContent = rpeInput.value;
+    });
+  }
+}
+
 async function populateUsers() {
-  const userSelect = document.getElementById('userName'); // dropdown for names
-  const userIdHidden = document.getElementById('userIdHidden'); // hidden input
+  const userSelect = document.getElementById('userName');
+  const userIdHidden = document.getElementById('userIdHidden');
 
   const res = await fetch('http://localhost:3000/api/users');
   const users = await res.json();
@@ -25,7 +37,6 @@ async function populateUsers() {
     userSelect.appendChild(option);
   });
 
-  // When a user is selected, store ID in hidden field
   userSelect.addEventListener('change', () => {
     userIdHidden.value = userSelect.value;
   });
@@ -84,11 +95,10 @@ function showNextScheduledExercise() {
   }
 
   const ex = currentScheduledExercises[currentIndex];
-
   const exerciseInfo = window.exerciseOptions.find(opt => opt.id === ex.exerciseId);
   const exerciseName = exerciseInfo ? exerciseInfo.name : `Unknown (${ex.exerciseId})`;
 
-  const scheduledCard = `
+  scheduledDiv.innerHTML = `
     <p><strong>Exercise:</strong> ${exerciseName}</p>
     <p><strong>Sets:</strong> ${ex.sets}</p>
     <p><strong>Reps:</strong> ${ex.reps}</p>
@@ -96,7 +106,6 @@ function showNextScheduledExercise() {
     <p><strong>Rest Interval:</strong> ${ex.restInterval}</p>
     <p><strong>Duration:</strong> ${ex.duration}</p>
   `;
-  scheduledDiv.innerHTML = scheduledCard;
 
   const actualCard = document.createElement('div');
   actualCard.classList.add('exercise-entry');
@@ -138,10 +147,47 @@ function handleSkipToggle() {
   const exerciseSection = document.querySelector('.exercise-layout');
 
   wasSkipped.addEventListener('change', () => {
-    if (wasSkipped.value === 'true') {
-      exerciseSection.style.display = 'none';
-    } else {
-      exerciseSection.style.display = '';
+    exerciseSection.style.display = wasSkipped.value === 'true' ? 'none' : '';
+  });
+}
+
+function setupFormSubmit() {
+  document.getElementById('logForm').addEventListener('submit', async function (e) {
+    e.preventDefault();
+
+    const formData = new FormData(this);
+    const data = Object.fromEntries(formData.entries());
+
+    const logData = {
+      logId: 'log' + Date.now(),
+      userId: data.userId,
+      date: data.date,
+      scheduledWorkoutId: data.scheduledWorkoutId || undefined,
+      startTime: data.startTime,
+      endTime: data.endTime,
+      wasSkipped: data.wasSkipped === 'true',
+      rpe: Number(data.rpe),
+      exercises: collectedExercises
+    };
+
+    try {
+      const response = await fetch('http://localhost:3000/api/workouts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(logData)
+      });
+
+      const result = await response.json();
+
+      const messageEl = document.getElementById('message');
+      if (response.ok) {
+        messageEl.textContent = '✅ Workout logged!';
+        resetForm();
+      } else {
+        messageEl.textContent = `❌ Error: ${result.error}`;
+      }
+    } catch (err) {
+      document.getElementById('message').textContent = '❌ Failed to connect to server.';
     }
   });
 }
@@ -154,41 +200,3 @@ function resetForm() {
   collectedExercises.length = 0;
   currentIndex = 0;
 }
-
-document.getElementById('logForm').addEventListener('submit', async function (e) {
-  e.preventDefault();
-
-  const formData = new FormData(this);
-  const data = Object.fromEntries(formData.entries());
-
-  const logData = {
-    logId: 'log' + Date.now(),
-    userId: data.userId,
-    date: data.date,
-    scheduledWorkoutId: data.scheduledWorkoutId || undefined,
-    startTime: data.startTime,
-    endTime: data.endTime,
-    wasSkipped: data.wasSkipped === 'true',
-    rpe: Number(data.rpe),
-    exercises: collectedExercises
-  };
-
-  try {
-    const response = await fetch('http://localhost:3000/api/workouts', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(logData)
-    });
-
-    const result = await response.json();
-
-    if (response.ok) {
-      document.getElementById('message').textContent = '✅ Workout logged!';
-      resetForm();
-    } else {
-      document.getElementById('message').textContent = `❌ Error: ${result.error}`;
-    }
-  } catch (err) {
-    document.getElementById('message').textContent = '❌ Failed to connect to server.';
-  }
-});
