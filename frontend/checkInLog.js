@@ -1,9 +1,21 @@
+// Front‑end logic for the check‑in form.
+//
+// This script handles submission of the check‑in form by gathering the
+// form values, building a payload object with the proper structure and
+// sending it to the server. It provides basic success/error feedback
+// messages to the user and prevents a full page reload.
+
 document.getElementById('checkInForm').addEventListener('submit', async function (e) {
   e.preventDefault();
 
+  // Collect the form fields into an object. Using FormData makes this
+  // straightforward and avoids manually reading each input.
   const formData = new FormData(this);
   const data = Object.fromEntries(formData.entries());
 
+  // Construct the API payload. The backend expects numeric types for
+  // measurements and energy level, so we explicitly cast them. A simple
+  // timestamp‑based ID is used for the checkInId.
   const checkInData = {
     checkInId: 'ci' + Date.now(),
     userId: data.userId,
@@ -31,14 +43,19 @@ document.getElementById('checkInForm').addEventListener('submit', async function
     });
 
     const result = await response.json();
+    const messageEl = document.getElementById('message');
 
     if (response.ok) {
-      document.getElementById('message').textContent = '✅ Check-in logged successfully!';
+      // Inform the user that the check‑in was recorded and reset the form.
+      messageEl.textContent = 'Check‑in logged successfully!';
       this.reset();
     } else {
-      document.getElementById('message').textContent = `❌ Error: ${result.error}`;
+      // Show any errors returned by the API.
+      messageEl.textContent = `Error: ${result.error}`;
     }
   } catch (err) {
-    document.getElementById('message').textContent = '❌ Failed to connect to server.';
+    // Provide a simple connection error message. More sophisticated error
+    // handling could be added here if desired.
+    document.getElementById('message').textContent = 'Failed to connect to server.';
   }
 });

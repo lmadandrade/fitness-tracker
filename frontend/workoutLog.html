@@ -2,192 +2,89 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Log Workout - FitTracker</title>
   <link rel="stylesheet" href="style.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-  <div class="container">
-    <!-- Top Navigation Bar -->
-    <header class="top-nav">
-      <div class="nav-left">
-        <div class="logo">
-          <i class="fas fa-dumbbell"></i>
-          <span>FitTracker</span>
+  <!-- Site header -->
+  <header>
+    <h1>FitTracker</h1>
+  </header>
+  <div class="wrapper">
+    <!-- Sidebar navigation -->
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="workouts.html">Workouts</a>
+      <a href="exerciseLab.html">Exercises</a>
+      <a href="checkInLog.html">Progress</a>
+      <a href="settings.html">Settings</a>
+    </nav>
+    <!-- Main content -->
+    <main>
+      <h2>Log a Workout</h2>
+      <form id="logForm">
+        <div class="form-group">
+          <label for="userName">User</label>
+          <select id="userName" required></select>
+          <input type="hidden" id="userIdHidden" name="userId" />
         </div>
-      </div>
-      <div class="nav-right">
-        <div class="user-profile">
-          <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face" alt="User" class="profile-img">
-          <span>Albp</span>
-          <i class="fas fa-chevron-down"></i>
+        <div class="form-group">
+          <label for="date">Date</label>
+          <input type="date" id="date" name="date" required />
         </div>
-        <button class="settings-btn" onclick="location.href='settings.html'">
-          <i class="fas fa-cog"></i>
-        </button>
-      </div>
-    </header>
-
-    <div class="main-content">
-      <!-- Left Sidebar -->
-      <aside class="sidebar">
-        <nav class="sidebar-nav">
-          <ul>
-            <li><a href="index.html"><i class="fas fa-home"></i><span>Home</span></a></li>
-            <li class="active"><a href="workouts.html"><i class="fas fa-dumbbell"></i><span>Workouts</span></a></li>
-            <li><a href="exerciseLab.html"><i class="fas fa-list"></i><span>Exercises</span></a></li>
-            <li><a href="checkInLog.html"><i class="fas fa-chart-line"></i><span>Progress</span></a></li>
-            <li><a href="settings.html"><i class="fas fa-user"></i><span>Settings</span></a></li>
-          </ul>
-        </nav>
-      </aside>
-
-      <!-- Main Dashboard -->
-      <main class="dashboard">
-        <div class="dashboard-content">
-          <!-- Page Header -->
-          <div class="page-header">
-            <div class="header-content">
-              <h1><i class="fas fa-plus-circle"></i> Log a Workout</h1>
-              <p>Record your workout performance and track your progress</p>
-            </div>
-            <div class="header-actions">
-              <button type="button" class="secondary-btn" onclick="location.href='index.html'">
-                <i class="fas fa-arrow-left"></i> Back to Home
-              </button>
-            </div>
+        <div class="form-group">
+          <label for="scheduledWorkoutId">Scheduled Workout</label>
+          <select id="scheduledWorkoutId" name="scheduledWorkoutId">
+            <option value="">None</option>
+          </select>
+        </div>
+        <div class="form-group two-col">
+          <div>
+            <label for="startTime">Start Time</label>
+            <input type="time" id="startTime" name="startTime" required />
           </div>
-
-          <!-- Workout Form -->
-          <form id="logForm" class="workout-form">
-            <!-- Basic Information Section -->
-            <section class="form-section">
-              <div class="section-header">
-                <h2><i class="fas fa-info-circle"></i> Workout Information</h2>
-              </div>
-              <div class="form-card">
-                <div class="form-grid">
-                  <div class="form-group">
-                    <label for="userName">User</label>
-                    <select id="userName" required>
-                      <option value="">Select User</option>
-                    </select>
-                    <input type="hidden" id="userIdHidden" name="userId" />
-                    <small>Choose the user for this workout</small>
-                  </div>
-                  <div class="form-group">
-                    <label for="date">Workout Date</label>
-                    <input type="date" name="date" id="date" required />
-                    <small>Date when the workout was performed</small>
-                  </div>
-                  <div class="form-group">
-                    <label for="scheduledWorkoutId">Scheduled Workout</label>
-                    <select name="scheduledWorkoutId" id="scheduledWorkoutId">
-                      <option value="">None (Free workout)</option>
-                    </select>
-                    <small>Optional: Select if this was a scheduled workout</small>
-                  </div>
-                  <div class="form-group">
-                    <label for="startTime">Start Time</label>
-                    <input type="time" name="startTime" id="startTime" required />
-                    <small>When did you start your workout?</small>
-                  </div>
-                  <div class="form-group">
-                    <label for="endTime">End Time</label>
-                    <input type="time" name="endTime" id="endTime" required />
-                    <small>When did you finish your workout?</small>
-                  </div>
-                  <div class="form-group">
-                    <label for="wasSkipped">Workout Status</label>
-                    <select name="wasSkipped" id="wasSkipped">
-                      <option value="false">Completed</option>
-                      <option value="true">Skipped</option>
-                    </select>
-                    <small>Did you complete or skip this workout?</small>
-                  </div>
-                  <div class="form-group">
-                    <label for="rpe">Intensity Level (RPE)</label>
-                    <div class="rpe-input">
-                      <input type="range" name="rpe" id="rpe" min="1" max="10" value="5" />
-                      <div class="rpe-display">
-                        <span id="rpeValue">5</span>/10
-                      </div>
-                    </div>
-                    <small>Rate of Perceived Exertion (1 = Very Easy, 10 = Maximum Effort)</small>
-                  </div>
-                </div>
-              </div>
-            </section>
-
-            <!-- Exercise Logging Section -->
-            <section class="form-section">
-              <div class="section-header">
-                <h2><i class="fas fa-dumbbell"></i> Exercise Performance</h2>
-              </div>
-              <div class="exercise-layout">
-                <div class="exercise-card">
-                  <div class="card-header">
-                    <h3><i class="fas fa-calendar-alt"></i> Scheduled Exercises</h3>
-                    <span class="card-badge">Reference</span>
-                  </div>
-                  <div class="card-content" id="scheduledDetails">
-                    <div class="empty-state">
-                      <i class="fas fa-calendar-plus"></i>
-                      <p>Select a scheduled workout above to see planned exercises</p>
-                    </div>
-                  </div>
-                </div>
-                <div class="exercise-card">
-                  <div class="card-header">
-                    <h3><i class="fas fa-edit"></i> Actual Performance</h3>
-                    <span class="card-badge primary">Input</span>
-                  </div>
-                  <div class="card-content">
-                    <div id="exerciseContainer">
-                      <div class="empty-state">
-                        <i class="fas fa-plus-circle"></i>
-                        <p>Add exercises to log your performance</p>
-                        <button type="button" class="add-exercise-btn" onclick="addExercise()">
-                          <i class="fas fa-plus"></i> Add Exercise
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="card-actions" id="exerciseActions" style="display: none;">
-                    <button type="button" class="action-btn add" onclick="addExercise()">
-                      <i class="fas fa-plus"></i> Add Another Exercise
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </section>
-
-            <!-- Submit Section -->
-            <section class="form-section">
-              <div class="submit-section">
-                <div class="submit-info">
-                  <h3>Ready to save your workout?</h3>
-                  <p>Make sure all exercise details are correct before submitting. Your workout data will be saved to your progress history.</p>
-                </div>
-                <div class="submit-actions">
-                  <button type="button" class="secondary-btn" onclick="resetForm()">
-                    <i class="fas fa-undo"></i> Reset Form
-                  </button>
-                  <button type="submit" class="submit-btn">
-                    <i class="fas fa-save"></i> Save Workout
-                  </button>
-                </div>
-              </div>
-            </section>
-          </form>
-          <div id="message" class="message-container"></div>
+          <div>
+            <label for="endTime">End Time</label>
+            <input type="time" id="endTime" name="endTime" required />
+          </div>
         </div>
-      </main>
-    </div>
+        <div class="form-group">
+          <label for="wasSkipped">Workout Status</label>
+          <select id="wasSkipped" name="wasSkipped">
+            <option value="false">Completed</option>
+            <option value="true">Skipped</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="rpe">Intensity Level (RPE)</label>
+          <input type="range" id="rpe" name="rpe" min="1" max="10" value="5" oninput="document.getElementById('rpeValue').textContent = this.value" />
+          <div><span id="rpeValue">5</span>/10</div>
+        </div>
+        <!-- Containers for scheduled and actual performance. Wrapped in a
+             flex container so they can sit side by side on larger screens. -->
+        <div class="exercise-columns">
+          <div class="exercise-card">
+            <h3>Scheduled Exercises</h3>
+            <div id="scheduledDetails"></div>
+          </div>
+          <div class="exercise-card">
+            <h3>Actual Performance</h3>
+            <div id="exerciseContainer"></div>
+          </div>
+        </div>
+        <div class="form-group">
+          <button type="button" class="secondary" onclick="addExercise()">Add Exercise</button>
+        </div>
+        <div class="form-group">
+          <button type="button" class="secondary" onclick="resetForm()">Reset</button>
+          <button type="submit">Save Workout</button>
+        </div>
+        <div id="message" class="message-container"></div>
+      </form>
+    </main>
   </div>
-
+  <!-- Use the simplified client script for logging workouts -->
   <script src="workoutLog.js"></script>
 </body>
 </html>
-

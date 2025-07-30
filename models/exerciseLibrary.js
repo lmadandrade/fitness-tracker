@@ -11,8 +11,7 @@ const exerciseLibrarySchema = new mongoose.Schema({
     enum: ['compound', 'isolation', 'cardio', 'stretch'],
     required: true
   },
-  description: { type: String, default: '' },
-  tags: [String] // e.g., ["strength", "mobility"]
+  description: { type: String, default: '' }
 }, { timestamps: true });
 
 module.exports = mongoose.model('ExerciseLibrary', exerciseLibrarySchema);
