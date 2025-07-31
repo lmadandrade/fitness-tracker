@@ -25,9 +25,11 @@
 
     <!-- Main content -->
     <main>
-      <h2>Add New Exercise</h2>
+      <h2>Add or Edit Exercise</h2>
       <form id="exerciseForm">
-        <!-- The userId is auto-attached by exerciseLab.js -->
+        <!-- Hidden field for editing -->
+        <input type="hidden" id="editingExerciseId" name="editingExerciseId" />
+
         <div class="form-group">
           <label for="name">Exercise Name</label>
           <input type="text" id="name" name="name" required />
@@ -56,7 +58,7 @@
         </div>
         <div class="form-group">
           <button type="reset" class="secondary">Reset</button>
-          <button type="submit">Save Exercise</button>
+          <button type="submit" id="submitBtn">Save Exercise</button>
         </div>
         <p id="message" class="message-container"></p>
       </form>
@@ -66,7 +68,7 @@
     </main>
   </div>
 
-  <!-- auth.js enforces login and makes userId available -->
+  <!-- Scripts -->
   <script src="auth.js"></script>
   <script src="exerciseLab.js"></script>
 </body>

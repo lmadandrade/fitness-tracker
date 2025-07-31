@@ -93,23 +93,60 @@ async function fetchCheckIns(userId) {
     const data = await res.json();
 
     if (!Array.isArray(data) || data.length === 0) {
-      listEl.textContent = 'No check-ins found.';
+      listEl.innerHTML = '<p class="no-data">No check-ins found. Start tracking your progress!</p>';
       return;
     }
+
+    // Sort check-ins by date (newest first)
+    data.sort((a, b) => new Date(b.date) - new Date(a.date));
 
     data.forEach(entry => {
       const card = document.createElement('div');
       card.className = 'checkin-card';
+      
+      // Format the date nicely
+      const date = new Date(entry.date);
+      const formattedDate = date.toLocaleDateString('en-US', { 
+        weekday: 'short', 
+        year: 'numeric', 
+        month: 'short', 
+        day: 'numeric' 
+      });
+
+      // Build measurements section if any measurements exist
+      let measurementsHtml = '';
+      if (entry.muscleMeasurements) {
+        const measurements = [];
+        if (entry.muscleMeasurements.chest) measurements.push(`Chest: ${entry.muscleMeasurements.chest}cm`);
+        if (entry.muscleMeasurements.waist) measurements.push(`Waist: ${entry.muscleMeasurements.waist}cm`);
+        if (entry.muscleMeasurements.arms) measurements.push(`Arms: ${entry.muscleMeasurements.arms}cm`);
+        if (entry.muscleMeasurements.thighs) measurements.push(`Thighs: ${entry.muscleMeasurements.thighs}cm`);
+        if (entry.muscleMeasurements.shoulders) measurements.push(`Shoulders: ${entry.muscleMeasurements.shoulders}cm`);
+        if (entry.muscleMeasurements.calves) measurements.push(`Calves: ${entry.muscleMeasurements.calves}cm`);
+        
+        if (measurements.length > 0) {
+          measurementsHtml = `
+            <div class="measurements">
+              <strong>Measurements:</strong>
+              <div class="measurement-grid">
+                ${measurements.map(m => `<span>${m}</span>`).join('')}
+              </div>
+            </div>
+          `;
+        }
+      }
+
       card.innerHTML = `
-        <h4>${entry.date}</h4>
-        <p><strong>Mood:</strong> ${entry.mood || '-'}</p>
-        <p><strong>Energy:</strong> ${entry.energyLevel ?? '-'} / 10</p>
-        <p><strong>Weight:</strong> ${entry.bodyWeight ?? '-'} kg</p>
-        <p><strong>Note:</strong> ${entry.note || '-'}</p>
+        <h4>${formattedDate}</h4>
+        <p><strong>Energy:</strong> ${entry.energyLevel ?? '-'}/10 | <strong>Mood:</strong> ${entry.mood || 'No mood'}</p>
+        ${entry.bodyWeight ? `<p><strong>Weight:</strong> ${entry.bodyWeight} kg</p>` : ''}
+        ${measurementsHtml}
+        ${entry.note ? `<div class="note"><strong>Notes:</strong> ${entry.note}</div>` : ''}
+        ${entry.progressPhotoUrl ? `<div class="photo"><strong>Progress Photo:</strong> <a href="${entry.progressPhotoUrl}" target="_blank">View Photo</a></div>` : ''}
       `;
       listEl.appendChild(card);
     });
   } catch (err) {
-    listEl.textContent = 'Error loading check-ins.';
+    listEl.innerHTML = '<p class="error-message">Error loading check-ins. Please try again later.</p>';
   }
 }

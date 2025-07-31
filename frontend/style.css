@@ -1,14 +1,4 @@
-/*
- * Simple CSS for FitTracker Web Application
- *
- * This stylesheet provides a clean and minimal layout for the
- * Fitness Tracker project. It uses a basic reset and a few
- * simple rules to create a userâ€‘friendly interface without any
- * external dependencies. Forms are laid out vertically with
- * clear labels and inputs, and navigation is easy to follow.
- */
-
-/* Reset margins and paddings */
+/* Global Styles */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -22,7 +12,7 @@ body {
   line-height: 1.5;
 }
 
-/* Header bar at the top of every page */
+/* Header Styles */
 header {
   background-color: #34495e;
   color: #fff;
@@ -37,7 +27,6 @@ header h1 {
   margin: 0;
 }
 
-/* Logout button in top bar */
 .logout-btn {
   padding: 8px 12px;
   border: none;
@@ -51,13 +40,14 @@ header h1 {
 .logout-btn:hover {
   background-color: #c0392b;
 }
-/* Wrapper for sidebar and main content */
+
+/* Layout Styles */
 .wrapper {
   display: flex;
   min-height: 100vh;
 }
 
-/* Sidebar navigation */
+/* Sidebar Navigation */
 nav {
   width: 200px;
   background-color: #ecf0f1;
@@ -82,13 +72,13 @@ nav a.active {
   font-weight: bold;
 }
 
-/* Main content area */
+/* Main Content Area */
 main {
   flex: 1;
   padding: 20px;
 }
 
-/* General form styling */
+/* Form Styles */
 form {
   background-color: #fff;
   padding: 20px;
@@ -122,7 +112,7 @@ form {
   min-height: 80px;
 }
 
-/* Buttons */
+/* Button Styles */
 button {
   padding: 8px 12px;
   border: none;
@@ -147,23 +137,20 @@ button:hover:not(:disabled) {
   opacity: 0.9;
 }
 
-/* Message styling */
+/* Message Styles */
 .message-container {
   margin-top: 10px;
   font-weight: bold;
 }
 
-/* Simple grid to align form fields in two columns when space permits */
+/* Two-column Grid for Forms */
 .two-col {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 15px;
 }
 
-/* Container for scheduled and actual exercises */
-/* Container for scheduled and actual exercise input blocks. Always
-   stack blocks vertically so the layout remains readable when adding
-   many exercises. */
+/* Exercise Layout Styles */
 .exercise-layout {
   display: flex;
   flex-direction: column;
@@ -171,9 +158,332 @@ button:hover:not(:disabled) {
   margin: 20px 0;
 }
 
-@media (min-width: 768px) {
-  .exercise-layout {
-    flex-direction: column;
-    gap: 20px;
+.exercise-header {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.remove-btn {
+  background: none;
+  border: none;
+  color: #c0392b;
+  font-size: 1.2rem;
+  cursor: pointer;
+  margin-bottom: 5px;
+}
+
+.remove-btn:hover {
+  color: #e74c3c;
+}
+
+/* Custom Checkbox Styles (e.g., for skip workout) */
+.skip-checkbox {
+  margin: 20px 0;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-size: 1rem;
+  position: relative;
+  padding-left: 35px;
+}
+
+.checkbox-label input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  width: 0;
+  height: 0;
+}
+
+.checkmark {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 20px;
+  width: 20px;
+  background-color: #fff;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.checkbox-label:hover .checkmark {
+  border-color: #3498db;
+}
+
+.checkbox-label input:checked ~ .checkmark {
+  background-color: #3498db;
+  border-color: #3498db;
+}
+
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+  left: 6px;
+  top: 2px;
+  width: 6px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.checkbox-label input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Scheduled Exercise Card Styles */
+.scheduled-exercise-entry {
+  margin-bottom: 20px;
+}
+
+.scheduled-exercise-card {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  padding: 20px;
+  align-items: start;
+}
+
+.exercise-plan {
+  background-color: #e9ecef;
+  padding: 15px;
+  border-radius: 6px;
+}
+
+.exercise-plan h5 {
+  margin: 0 0 10px 0;
+  color: #2c3e50;
+  font-size: 1.1rem;
+}
+
+.plan-details {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  font-size: 0.9rem;
+}
+
+.plan-details span {
+  color: #495057;
+}
+
+.exercise-actual h6 {
+  margin: 0 0 15px 0;
+  color: #2c3e50;
+  font-size: 1rem;
+}
+
+.actual-inputs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.input-pair {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-pair label {
+  font-size: 0.85rem;
+  margin-bottom: 4px;
+  color: #6c757d;
+  font-weight: normal;
+}
+
+.input-pair input {
+  padding: 8px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+/* Manual Exercise Entry Styles */
+.exercise-entry {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 5px;
+  padding: 15px;
+  margin-bottom: 10px;
+}
+
+.exercise-entry h5 {
+  margin-bottom: 10px;
+  color: #2c3e50;
+  font-size: 1.1rem;
+}
+
+/* Exercise input grid for manual exercises */
+.exercise-input-grid {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 20px;
+  align-items: start;
+}
+
+/* Inputs for manual exercises */
+.exercise-inputs {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 10px;
+}
+
+.exercise-inputs .input-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.exercise-inputs label {
+  font-size: 0.8rem;
+  margin-bottom: 3px;
+  color: #6c757d;
+  font-weight: normal;
+}
+
+.exercise-inputs input {
+  padding: 6px 8px;
+  border: 1px solid #ced4da;
+  border-radius: 3px;
+  font-size: 0.9rem;
+}
+
+/* Remove button for manual exercises */
+.exercise-remove {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 10px;
+}
+
+.exercise-remove button {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+.exercise-remove button:hover {
+  background-color: #c82333;
+}
+
+/* Responsive Design for Smaller Screens */
+@media (max-width: 768px) {
+  .scheduled-exercise-card,
+  .exercise-input-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  
+  .exercise-inputs {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .actual-inputs,
+  .plan-details {
+    grid-template-columns: 1fr;
   }
 }
+
+/* Check-in Display Styles */
+.checkin-display {
+  margin-top: 20px;
+}
+
+.checkin-card {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 15px;
+  margin-bottom: 15px;
+  max-width: 800px;
+}
+
+.checkin-card h4 {
+  margin: 0 0 10px 0;
+  color: #333;
+}
+
+.checkin-card p {
+  margin: 5px 0;
+}
+
+.measurements {
+  margin: 10px 0;
+}
+
+.measurement-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 5px;
+  margin-top: 5px;
+}
+
+.measurement-grid span {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.note {
+  margin: 10px 0;
+  padding: 10px;
+  background-color: #f5f5f5;
+  font-style: italic;
+}
+
+.photo {
+  margin: 10px 0;
+}
+
+.photo a {
+  color: #3498db;
+  text-decoration: none;
+}
+
+.photo a:hover {
+  text-decoration: underline;
+}
+
+/* Exercise List Styles */
+.exercise-list {
+  margin-top: 20px;
+}
+
+.exercise-card {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 15px;
+  margin-bottom: 15px;
+  max-width: 800px;
+}
+
+.exercise-card h3 {
+  margin: 0 0 10px 0;
+  color: #333;
+}
+
+.exercise-card p {
+  margin: 5px 0;
+}
+
+.exercise-card button {
+  margin-top: 10px;
+}
+
+.no-data,
+.error-message {
+  text-align: center;
+  color: #666;
+  font-style: italic;
+  padding: 20px;
+}
+

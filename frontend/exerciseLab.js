@@ -1,8 +1,4 @@
 // exerciseLab.js
-// This script handles creating new exercises and displaying the current
-// user's exercises in a simple card layout. It relies on auth.js to
-// ensure the user is logged in and to populate the hidden userId when
-// creating an exercise.
 
 document.addEventListener('DOMContentLoaded', () => {
   const userId = localStorage.getItem('userId');
@@ -15,40 +11,65 @@ document.addEventListener('DOMContentLoaded', () => {
   loadExerciseList();
 
   const form = document.getElementById('exerciseForm');
+  const editingField = document.getElementById('editingExerciseId');
+  const submitBtn = document.getElementById('submitBtn');
+  const message = document.getElementById('message');
+
   if (form) {
     form.addEventListener('submit', async function (e) {
       e.preventDefault();
       const formData = new FormData(this);
       const data = Object.fromEntries(formData.entries());
 
-      // Generate a unique exercise identifier
-      data.exerciseId = 'ex' + Date.now();
       data.userId = userId;
 
       try {
-        const response = await fetch('http://localhost:3000/api/exercises', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data)
-        });
+        let response;
+
+        if (editingField.value) {
+          // UPDATE existing exercise
+          data.exerciseId = editingField.value;
+          response = await fetch(`http://localhost:3000/api/exercises/${data.exerciseId}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+          });
+        } else {
+          // CREATE new exercise
+          data.exerciseId = 'ex' + Date.now();
+          response = await fetch('http://localhost:3000/api/exercises', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+          });
+        }
 
         const result = await response.json();
 
         if (response.ok) {
-          document.getElementById('message').textContent = '✅ Exercise created successfully!';
-          this.reset();
+          message.textContent = editingField.value
+            ? '✅ Exercise updated successfully!'
+            : '✅ Exercise created successfully!';
+          form.reset();
+          editingField.value = '';
+          submitBtn.textContent = 'Save Exercise';
           loadExerciseList();
         } else {
-          document.getElementById('message').textContent = `Error: ${result.error || 'Unknown error'}`;
+          message.textContent = `Error: ${result.error || 'Unknown error'}`;
         }
       } catch (err) {
-        document.getElementById('message').textContent = 'Failed to connect to server.';
+        message.textContent = 'Failed to connect to server.';
       }
+    });
+
+    form.addEventListener('reset', () => {
+      editingField.value = '';
+      submitBtn.textContent = 'Save Exercise';
+      message.textContent = '';
     });
   }
 });
 
-// Load the user's exercises and display them as cards
 async function loadExerciseList() {
   const listEl = document.getElementById('exerciseList');
   if (!listEl) return;
@@ -88,15 +109,23 @@ async function loadExerciseList() {
         form.equipment.value = ex.equipment;
         form.type.value = ex.type;
         form.description.value = ex.description || '';
+        document.getElementById('editingExerciseId').value = ex.exerciseId;
+        document.getElementById('submitBtn').textContent = 'Update Exercise';
         form.scrollIntoView({ behavior: 'smooth' });
       });
 
       const removeBtn = document.createElement('button');
       removeBtn.textContent = 'Delete';
       removeBtn.className = 'secondary';
-      removeBtn.addEventListener('click', () => {
-        card.remove();
-        // Optional: add DELETE request to backend later if needed
+      removeBtn.addEventListener('click', async () => {
+        try {
+          await fetch(`http://localhost:3000/api/exercises/${ex.exerciseId}`, {
+            method: 'DELETE'
+          });
+          card.remove();
+        } catch (err) {
+          alert('Error deleting exercise.');
+        }
       });
 
       card.appendChild(editBtn);

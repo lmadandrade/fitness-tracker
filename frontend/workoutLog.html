@@ -57,25 +57,31 @@
         </div>
 
         <!-- Skip toggle -->
-        <div class="form-group">
-          <label for="skip">
+        <div class="form-group skip-checkbox">
+          <label for="skip" class="checkbox-label">
             <input type="checkbox" id="skip" name="skip" />
+            <span class="checkmark"></span>
             I skipped today's workout
           </label>
         </div>
 
-        <!-- Scheduled exercise info block -->
+        <!-- Exercise logging section -->
         <div class="skip-hide">
-          <h3>Scheduled Exercises</h3>
-          <div id="scheduledExercises"></div>
-        </div>
+          <h3>Exercise Logging</h3>
+          
+          <!-- Scheduled exercises with input fields -->
+          <div id="scheduledExercisesSection" style="display: none;">
+            <h4>Scheduled Exercises</h4>
+            <div id="scheduledExercises" class="exercise-layout"></div>
+          </div>
 
-        <!-- Manual performance entry block -->
-        <div class="skip-hide">
-          <h3>Manual Exercises</h3>
-          <div id="manualExercises"></div>
-          <div class="form-group">
-            <button type="button" class="secondary" onclick="addExercise()">Add Exercise</button>
+          <!-- Manual exercises section -->
+          <div id="manualExercisesSection">
+            <h4>Manual Exercises</h4>
+            <div id="manualExercises" class="exercise-layout"></div>
+            <div class="form-group">
+              <button type="button" class="secondary" onclick="addExercise()">Add Exercise</button>
+            </div>
           </div>
         </div>
 

@@ -1,7 +1,5 @@
 // workoutSchedule.js
 // Handles creating a workout schedule with dynamic exercise blocks
-// Exercises are fetched based on the logged-in user, and each block includes
-// fields for sets, reps, weight, rest, and duration.
 
 const userId = localStorage.getItem('userId');
 if (!userId) {
@@ -15,16 +13,18 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 let exerciseOptions = [];
+let exerciseTypeMap = {}; // Map to store exerciseId -> type
 
 // Fetch exercises for the logged-in user and update dropdowns
 async function fetchExercises() {
   try {
     const response = await fetch(`http://localhost:3000/api/exercises?userId=${userId}`);
     const data = await response.json();
-    exerciseOptions = data.map(ex => ({
-      id: ex.exerciseId || ex._id,
-      name: ex.name
-    }));
+    exerciseOptions = data.map(ex => {
+      const id = ex.exerciseId || ex._id;
+      exerciseTypeMap[id] = ex.type;
+      return { id, name: ex.name };
+    });
     updateAllDropdowns();
   } catch (err) {
     document.getElementById('message').textContent = 'Failed to fetch exercises.';
@@ -35,13 +35,26 @@ async function fetchExercises() {
 function updateAllDropdowns() {
   const selects = document.querySelectorAll('.exercise-select');
   selects.forEach(select => {
+    const currentValue = select.value;
     select.innerHTML = '<option value="">Select Exercise</option>';
     exerciseOptions.forEach(ex => {
       const option = document.createElement('option');
       option.value = ex.id;
       option.textContent = ex.name;
+      if (ex.id === currentValue) {
+        option.selected = true;
+      }
       select.appendChild(option);
     });
+  });
+}
+
+// Show/hide ❌ buttons based on block count
+function updateRemoveButtonsVisibility() {
+  const allBlocks = document.querySelectorAll('.exercise-block');
+  const allRemoveBtns = document.querySelectorAll('.remove-btn');
+  allRemoveBtns.forEach(btn => {
+    btn.style.display = allBlocks.length > 1 ? 'inline-block' : 'none';
   });
 }
 
@@ -50,7 +63,11 @@ function addExerciseBlock() {
   const container = document.getElementById('exerciseList');
   const block = document.createElement('div');
   block.classList.add('exercise-block');
+
   block.innerHTML = `
+    <div class="exercise-header">
+      <button type="button" class="remove-btn">❌</button>
+    </div>
     <div class="form-grid">
       <div class="form-group">
         <label>Exercise</label>
@@ -58,31 +75,67 @@ function addExerciseBlock() {
           <option value="">Select Exercise</option>
         </select>
       </div>
-      <div class="form-group">
+      <div class="form-group sets-group">
         <label>Sets</label>
         <input type="number" name="sets" required />
       </div>
-      <div class="form-group">
+      <div class="form-group reps-group">
         <label>Reps</label>
         <input type="number" name="reps" required />
       </div>
-      <div class="form-group">
+      <div class="form-group weight-group">
         <label>Target Weight (kg)</label>
         <input type="number" name="targetWeight" required />
       </div>
-      <div class="form-group">
+      <div class="form-group rest-group">
         <label>Rest Interval (sec)</label>
         <input type="number" name="restInterval" />
       </div>
-      <div class="form-group">
+      <div class="form-group duration-group">
         <label>Duration (min)</label>
         <input type="number" name="duration" />
       </div>
     </div>
     <hr />
   `;
+
   container.appendChild(block);
   updateAllDropdowns();
+
+  const select = block.querySelector('.exercise-select');
+  const sets = block.querySelector('.sets-group');
+  const reps = block.querySelector('.reps-group');
+  const weight = block.querySelector('.weight-group');
+  const rest = block.querySelector('.rest-group');
+  const duration = block.querySelector('.duration-group');
+
+  select.addEventListener('change', () => {
+    const type = exerciseTypeMap[select.value];
+    if (type === 'cardio' || type === 'stretch') {
+      sets.style.display = 'none';
+      reps.style.display = 'none';
+      weight.style.display = 'none';
+      rest.style.display = 'none';
+      duration.style.display = 'block';
+    } else {
+      sets.style.display = 'block';
+      reps.style.display = 'block';
+      weight.style.display = 'block';
+      rest.style.display = 'block';
+      duration.style.display = 'none';
+    }
+  });
+
+  const removeBtn = block.querySelector('.remove-btn');
+  removeBtn.addEventListener('click', () => {
+    const allBlocks = document.querySelectorAll('.exercise-block');
+    if (allBlocks.length > 1) {
+      block.remove();
+      updateRemoveButtonsVisibility();
+    }
+  });
+
+  updateRemoveButtonsVisibility();
 }
 
 // Handle form submission and send schedule to the server
@@ -97,13 +150,19 @@ document.getElementById('scheduleForm').addEventListener('submit', async functio
 
   for (const block of exerciseBlocks) {
     const exerciseId = block.querySelector('[name="exerciseId"]').value;
-    const sets = Number(block.querySelector('[name="sets"]').value);
-    const reps = Number(block.querySelector('[name="reps"]').value);
-    const targetWeight = Number(block.querySelector('[name="targetWeight"]').value);
-    const restInterval = Number(block.querySelector('[name="restInterval"]').value) || 0;
-    const duration = Number(block.querySelector('[name="duration"]').value) || 0;
+    const setsEl = block.querySelector('[name="sets"]');
+    const repsEl = block.querySelector('[name="reps"]');
+    const weightEl = block.querySelector('[name="targetWeight"]');
+    const restEl = block.querySelector('[name="restInterval"]');
+    const durationEl = block.querySelector('[name="duration"]');
 
-    if (!exerciseId || !sets || !reps || !targetWeight) {
+    const sets = setsEl ? Number(setsEl.value) : 0;
+    const reps = repsEl ? Number(repsEl.value) : 0;
+    const targetWeight = weightEl ? Number(weightEl.value) : 0;
+    const restInterval = restEl ? Number(restEl.value) : 0;
+    const duration = durationEl ? Number(durationEl.value) : 0;
+
+    if (!exerciseId) {
       document.getElementById('message').textContent = 'Please fill all required exercise fields.';
       return;
     }
