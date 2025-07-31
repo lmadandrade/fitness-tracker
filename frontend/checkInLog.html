@@ -8,9 +8,11 @@
 </head>
 <body>
   <!-- Site header -->
-  <header>
+  <header class="site-header">
     <h1>FitTracker</h1>
+    <button class="logout-btn" onclick="logout()">Logout</button>
   </header>
+
   <div class="wrapper">
     <!-- Sidebar navigation -->
     <nav>
@@ -20,40 +22,41 @@
       <a href="checkInLog.html" class="active">Progress</a>
       <a href="settings.html">Settings</a>
     </nav>
+
     <!-- Main content -->
     <main>
       <h2>Check‑In Log</h2>
       <form id="checkInForm">
-        <div class="form-group">
-          <label for="userId">User ID</label>
-          <input type="text" id="userId" name="userId" required />
-        </div>
+        <input type="hidden" id="userId" name="userId" />
+
         <div class="form-group">
           <label for="date">Date</label>
           <input type="date" id="date" name="date" required />
         </div>
+
         <div class="form-group">
-          <label for="energyLevel">Energy Level (1–10)</label>
-          <input type="range" id="energyLevel" name="energyLevel" min="1" max="10" value="5" oninput="document.getElementById('energyValue').textContent = this.value" />
-          <div><span id="energyValue">5</span>/10</div>
+          <label for="energyLevel">Energy Level: <span id="energyValue">5</span></label>
+          <input type="range" id="energyLevel" name="energyLevel" min="1" max="10" value="5" />
         </div>
+
         <div class="form-group">
           <label for="mood">Mood</label>
           <select id="mood" name="mood">
-            <option value="">Select mood</option>
             <option value="Happy">Happy</option>
-            <option value="Sad">Sad</option>
-            <option value="Motivated">Motivated</option>
-            <option value="Tired">Tired</option>
+            <option value="Energized">Energized</option>
             <option value="Neutral">Neutral</option>
+            <option value="Tired">Tired</option>
             <option value="Stressed">Stressed</option>
+            <option value="Sore">Sore</option>
+            <option value="Motivated">Motivated</option>
           </select>
         </div>
+
         <div class="form-group">
           <label for="bodyWeight">Body Weight</label>
           <input type="number" id="bodyWeight" name="bodyWeight" step="0.1" />
         </div>
-        <!-- Measurements -->
+
         <h3>Body Measurements (cm)</h3>
         <div class="two-col">
           <div class="form-group">
@@ -81,22 +84,31 @@
             <input type="number" id="calves" name="calves" step="0.1" />
           </div>
         </div>
+
         <div class="form-group">
           <label for="progressPhotoUrl">Progress Photo URL</label>
           <input type="text" id="progressPhotoUrl" name="progressPhotoUrl" />
         </div>
+
         <div class="form-group">
           <label for="note">Notes</label>
           <textarea id="note" name="note" placeholder="How did you feel?"></textarea>
         </div>
+
         <div class="form-group">
           <button type="submit">Submit Check‑In</button>
         </div>
+
         <p id="message" class="message-container"></p>
       </form>
+
+      <h3>Your Previous Check‑Ins</h3>
+      <div id="checkInList"></div>
     </main>
   </div>
-  <!-- Use the simplified client script for the check-in form -->
+
+  <!-- Scripts -->
+  <script src="auth.js"></script>
   <script src="checkInLog.js"></script>
 </body>
 </html>

@@ -1,17 +1,49 @@
-// Front‑end logic for the user settings form.
-//
-// This script intercepts the settings form submission, serialises the
-// form data and sends it to the backend API via a PUT request. It
-// provides basic feedback to the user about whether the update was
-// successful. Note that the backend must support this route.
+// settings.js
+// This script loads the user's current data into the settings form
+// and handles updates via PUT to /api/users/update
+
+document.addEventListener('DOMContentLoaded', async () => {
+  const userId = localStorage.getItem('userId');
+  const messageEl = document.getElementById('message');
+
+  if (!userId) {
+    alert('You must be logged in to view this page.');
+    window.location.href = 'login.html';
+    return;
+  }
+
+  try {
+    const response = await fetch(`http://localhost:3000/api/users/${userId}`);
+    if (!response.ok) throw new Error('Failed to fetch user data');
+
+    const user = await response.json();
+
+    // Populate form fields
+    document.getElementById('name').value = user.name || '';
+    document.getElementById('email').value = user.email || '';
+    document.getElementById('age').value = user.age || '';
+    document.getElementById('height').value = user.height || '';
+    document.getElementById('weight').value = user.weight || '';
+    document.getElementById('experienceLevel').value = user.experienceLevel || '';
+
+  } catch (err) {
+    messageEl.textContent = '❌ Could not load user profile.';
+    messageEl.classList.add('error');
+  }
+});
 
 document.getElementById('userSettingsForm').addEventListener('submit', async function (e) {
   e.preventDefault();
 
-  // Convert form fields into a plain object. This uses the browser's
-  // FormData API for convenience.
+  const userId = localStorage.getItem('userId');
+  if (!userId) {
+    alert('You must be logged in.');
+    return;
+  }
+
   const formData = new FormData(this);
   const data = Object.fromEntries(formData.entries());
+  data.userId = userId; // Ensure userId is included in the update
 
   try {
     const response = await fetch('http://localhost:3000/api/users/update', {
@@ -24,15 +56,13 @@ document.getElementById('userSettingsForm').addEventListener('submit', async fun
     const messageEl = document.getElementById('message');
 
     if (response.ok) {
-      // On success, display a confirmation message. You might choose to
-      // reload the user profile or update the UI in other ways.
-      messageEl.textContent = 'Profile updated successfully!';
-      this.reset();
+      messageEl.textContent = '✅ Profile updated successfully!';
+      messageEl.classList.add('success');
     } else {
-      // Display the error returned by the API.
-      messageEl.textContent = `Error: ${result.error}`;
+      messageEl.textContent = `❌ Error: ${result.error}`;
+      messageEl.classList.add('error');
     }
   } catch (err) {
-    document.getElementById('message').textContent = 'Failed to connect to server.';
+    document.getElementById('message').textContent = '❌ Failed to connect to server.';
   }
 });

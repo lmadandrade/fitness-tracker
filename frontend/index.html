@@ -8,8 +8,9 @@
 </head>
 <body>
   <!-- Top header with site title -->
-  <header>
+  <header class="site-header">
     <h1>FitTracker</h1>
+    <button class="logout-btn" onclick="logout()">Logout</button>
   </header>
   <div class="wrapper">
     <!-- Sidebar navigation -->
@@ -30,8 +31,12 @@
       <div class="form-group">
         <button onclick="location.href='workoutLog.html'">Log a Workout</button>
         <button onclick="location.href='workoutSchedule.html'">Plan a Schedule</button>
+        <button onclick="location.href='exerciseLab.html'">Add Exercise</button>
+        <button onclick="location.href='checkInLog.html'">Check‑In</button>
       </div>
     </main>
   </div>
+  <!-- authentication script ensures a user is logged in and exposes logout() -->
+  <script src="auth.js"></script>
 </body>
 </html>

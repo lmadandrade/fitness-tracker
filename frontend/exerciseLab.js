@@ -1,61 +1,109 @@
-// Front‑end script for creating a new exercise.
-//
-// This module listens for form submission on the exercise creation page,
-// gathers the user input, constructs a payload object and sends it to
-// the backend API. It generates a simple unique ID based on the current
-// timestamp and provides plain‑text feedback messages to the user.
+// exerciseLab.js
+// This script handles creating new exercises and displaying the current
+// user's exercises in a simple card layout. It relies on auth.js to
+// ensure the user is logged in and to populate the hidden userId when
+// creating an exercise.
 
-// Attach a submit handler to the exercise form. When the user submits the
-// form we collect the data, massage it into the format expected by the
-// backend API and then post it. We namespace the listener on the
-// specific form element so that event handling is explicit and easy to
-// follow.
-document.getElementById('exerciseForm').addEventListener('submit', async function (e) {
-  e.preventDefault();
-
-  // Convert form data into a plain object. FormData makes it easy to
-  // extract named fields from the form without manually querying each
-  // input element.
-  const formData = new FormData(this);
-  const data = Object.fromEntries(formData.entries());
-
-  // Assign a unique exerciseId. The backend expects a string ID but
-  // doesn't generate one itself, so we prefix a timestamp. This ensures
-  // that each exercise submitted has a unique identifier even when the
-  // database is reset between runs.
-  data.exerciseId = 'ex' + Date.now();
-
-  // Parse tags from a comma separated string into an array. The API
-  // expects tags to be an array of strings; splitting on commas and
-  // trimming whitespace preserves user input while meeting that contract.
-  if (data.tags) {
-    // Split on commas, trim each tag and filter out any empty entries.
-    data.tags = data.tags.split(',').map(t => t.trim()).filter(t => t);
+document.addEventListener('DOMContentLoaded', () => {
+  const userId = localStorage.getItem('userId');
+  if (!userId) {
+    alert('You must be logged in to view this page.');
+    window.location.href = 'login.html';
+    return;
   }
 
-  try {
-    const response = await fetch('http://localhost:3000/api/exercises', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
+  loadExerciseList();
+
+  const form = document.getElementById('exerciseForm');
+  if (form) {
+    form.addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+      const data = Object.fromEntries(formData.entries());
+
+      // Generate a unique exercise identifier
+      data.exerciseId = 'ex' + Date.now();
+      data.userId = userId;
+
+      try {
+        const response = await fetch('http://localhost:3000/api/exercises', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          document.getElementById('message').textContent = '✅ Exercise created successfully!';
+          this.reset();
+          loadExerciseList();
+        } else {
+          document.getElementById('message').textContent = `Error: ${result.error || 'Unknown error'}`;
+        }
+      } catch (err) {
+        document.getElementById('message').textContent = 'Failed to connect to server.';
+      }
     });
-
-    const result = await response.json();
-    const messageEl = document.getElementById('message');
-
-    if (response.ok) {
-      // Clear the form and show a success message when the API call
-      // succeeds.
-      messageEl.textContent = 'Exercise created successfully!';
-      this.reset();
-    } else {
-      // Display any validation or server error returned by the API.
-      messageEl.textContent = `Error: ${result.error}`;
-    }
-  } catch (err) {
-    // Catch network errors or failures to connect to the server.
-    document.getElementById('message').textContent = 'Failed to connect to server.';
   }
 });
+
+// Load the user's exercises and display them as cards
+async function loadExerciseList() {
+  const listEl = document.getElementById('exerciseList');
+  if (!listEl) return;
+
+  listEl.innerHTML = '';
+  const userId = localStorage.getItem('userId');
+  if (!userId) return;
+
+  try {
+    const res = await fetch(`http://localhost:3000/api/exercises?userId=${userId}`);
+    const exercises = await res.json();
+
+    if (exercises.length === 0) {
+      listEl.textContent = 'No exercises found. Add one above!';
+      return;
+    }
+
+    exercises.forEach(ex => {
+      const card = document.createElement('div');
+      card.classList.add('exercise-card');
+      card.innerHTML = `
+        <h3>${ex.name}</h3>
+        <p><strong>Muscle Group:</strong> ${ex.muscleGroup}</p>
+        <p><strong>Equipment:</strong> ${ex.equipment}</p>
+        <p><strong>Type:</strong> ${ex.type}</p>
+        <p>${ex.description || ''}</p>
+      `;
+
+      const editBtn = document.createElement('button');
+      editBtn.textContent = 'Edit';
+      editBtn.style.marginRight = '8px';
+      editBtn.addEventListener('click', () => {
+        const form = document.getElementById('exerciseForm');
+        if (!form) return;
+        form.name.value = ex.name;
+        form.muscleGroup.value = ex.muscleGroup;
+        form.equipment.value = ex.equipment;
+        form.type.value = ex.type;
+        form.description.value = ex.description || '';
+        form.scrollIntoView({ behavior: 'smooth' });
+      });
+
+      const removeBtn = document.createElement('button');
+      removeBtn.textContent = 'Delete';
+      removeBtn.className = 'secondary';
+      removeBtn.addEventListener('click', () => {
+        card.remove();
+        // Optional: add DELETE request to backend later if needed
+      });
+
+      card.appendChild(editBtn);
+      card.appendChild(removeBtn);
+      listEl.appendChild(card);
+    });
+  } catch (err) {
+    listEl.textContent = 'Failed to load exercises.';
+  }
+}

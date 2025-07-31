@@ -8,8 +8,9 @@
 </head>
 <body>
   <!-- Site header -->
-  <header>
+  <header class="site-header">
     <h1>FitTracker</h1>
+    <button class="logout-btn" onclick="logout()">Logout</button>
   </header>
   <div class="wrapper">
     <!-- Sidebar navigation -->
@@ -56,28 +57,6 @@
           </select>
         </div>
         <div class="form-group">
-          <label for="fitnessGoal">Primary Goal</label>
-          <select id="fitnessGoal" name="fitnessGoal">
-            <option value="">Select goal</option>
-            <option value="weight_loss">Weight Loss</option>
-            <option value="muscle_gain">Muscle Gain</option>
-            <option value="strength">Strength</option>
-            <option value="endurance">Endurance</option>
-            <option value="general_fitness">General Fitness</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="activityLevel">Activity Level</label>
-          <select id="activityLevel" name="activityLevel">
-            <option value="">Select level</option>
-            <option value="sedentary">Sedentary</option>
-            <option value="lightly_active">Lightly Active</option>
-            <option value="moderately_active">Moderately Active</option>
-            <option value="very_active">Very Active</option>
-            <option value="extremely_active">Extremely Active</option>
-          </select>
-        </div>
-        <div class="form-group">
           <button type="reset" class="secondary">Reset</button>
           <button type="submit">Save Changes</button>
         </div>
@@ -85,7 +64,8 @@
       </form>
     </main>
   </div>
-  <!-- Use the simplified client script for the settings form -->
+  <!-- Include auth.js to enforce login and populate userId -->
+  <script src="auth.js"></script>
   <script src="settings.js"></script>
 </body>
 </html>

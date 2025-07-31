@@ -8,9 +8,11 @@
 </head>
 <body>
   <!-- Site header -->
-  <header>
+  <header class="site-header">
     <h1>FitTracker</h1>
+    <button class="logout-btn" onclick="logout()">Logout</button>
   </header>
+
   <div class="wrapper">
     <!-- Sidebar navigation -->
     <nav>
@@ -20,71 +22,77 @@
       <a href="checkInLog.html">Progress</a>
       <a href="settings.html">Settings</a>
     </nav>
+
     <!-- Main content -->
     <main>
       <h2>Log a Workout</h2>
+
       <form id="logForm">
-        <div class="form-group">
-          <label for="userName">User</label>
-          <select id="userName" required></select>
-          <input type="hidden" id="userIdHidden" name="userId" />
-        </div>
+        <!-- Date Picker -->
         <div class="form-group">
           <label for="date">Date</label>
           <input type="date" id="date" name="date" required />
         </div>
+
+        <!-- Scheduled Workout Selector -->
         <div class="form-group">
           <label for="scheduledWorkoutId">Scheduled Workout</label>
           <select id="scheduledWorkoutId" name="scheduledWorkoutId">
             <option value="">None</option>
           </select>
         </div>
-        <div class="form-group two-col">
-          <div>
-            <label for="startTime">Start Time</label>
-            <input type="time" id="startTime" name="startTime" required />
-          </div>
-          <div>
-            <label for="endTime">End Time</label>
-            <input type="time" id="endTime" name="endTime" required />
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="wasSkipped">Workout Status</label>
-          <select id="wasSkipped" name="wasSkipped">
-            <option value="false">Completed</option>
-            <option value="true">Skipped</option>
-          </select>
-        </div>
+
+        <!-- RPE (Effort Level) -->
         <div class="form-group">
           <label for="rpe">Intensity Level (RPE)</label>
-          <input type="range" id="rpe" name="rpe" min="1" max="10" value="5" oninput="document.getElementById('rpeValue').textContent = this.value" />
+          <input
+            type="range"
+            id="rpe"
+            name="rpe"
+            min="1"
+            max="10"
+            value="5"
+          />
           <div><span id="rpeValue">5</span>/10</div>
         </div>
-        <!-- Containers for scheduled and actual performance. Wrapped in a
-             flex container so they can sit side by side on larger screens. -->
-        <div class="exercise-columns">
-          <div class="exercise-card">
-            <h3>Scheduled Exercises</h3>
-            <div id="scheduledDetails"></div>
-          </div>
-          <div class="exercise-card">
-            <h3>Actual Performance</h3>
-            <div id="exerciseContainer"></div>
-          </div>
-        </div>
+
+        <!-- Skip toggle -->
         <div class="form-group">
-          <button type="button" class="secondary" onclick="addExercise()">Add Exercise</button>
+          <label for="skip">
+            <input type="checkbox" id="skip" name="skip" />
+            I skipped today's workout
+          </label>
         </div>
+
+        <!-- Scheduled exercise info block -->
+        <div class="skip-hide">
+          <h3>Scheduled Exercises</h3>
+          <div id="scheduledExercises"></div>
+        </div>
+
+        <!-- Manual performance entry block -->
+        <div class="skip-hide">
+          <h3>Manual Exercises</h3>
+          <div id="manualExercises"></div>
+          <div class="form-group">
+            <button type="button" class="secondary" onclick="addExercise()">Add Exercise</button>
+          </div>
+        </div>
+
+        <!-- Form actions -->
         <div class="form-group">
           <button type="button" class="secondary" onclick="resetForm()">Reset</button>
           <button type="submit">Save Workout</button>
         </div>
+
+        <!-- Message container -->
         <div id="message" class="message-container"></div>
       </form>
     </main>
   </div>
-  <!-- Use the simplified client script for logging workouts -->
+
+  <!-- Scripts -->
+  <script src="auth.js"></script>
   <script src="workoutLog.js"></script>
 </body>
 </html>

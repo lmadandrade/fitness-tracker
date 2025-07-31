@@ -8,9 +8,11 @@
 </head>
 <body>
   <!-- Site header -->
-  <header>
+  <header class="site-header">
     <h1>FitTracker</h1>
+    <button class="logout-btn" onclick="logout()">Logout</button>
   </header>
+
   <div class="wrapper">
     <!-- Sidebar navigation -->
     <nav>
@@ -20,10 +22,12 @@
       <a href="checkInLog.html">Progress</a>
       <a href="settings.html">Settings</a>
     </nav>
+
     <!-- Main content -->
     <main>
       <h2>Add New Exercise</h2>
       <form id="exerciseForm">
+        <!-- The userId is auto-attached by exerciseLab.js -->
         <div class="form-group">
           <label for="name">Exercise Name</label>
           <input type="text" id="name" name="name" required />
@@ -56,9 +60,14 @@
         </div>
         <p id="message" class="message-container"></p>
       </form>
+
+      <!-- List of existing exercises will appear here -->
+      <div id="exerciseList" class="exercise-list"></div>
     </main>
   </div>
-  <!-- Use the simplified client script for the exercise form -->
+
+  <!-- auth.js enforces login and makes userId available -->
+  <script src="auth.js"></script>
   <script src="exerciseLab.js"></script>
 </body>
 </html>

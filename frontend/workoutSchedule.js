@@ -1,62 +1,53 @@
-// Front‑end logic for creating a workout schedule.
-//
-// This script loads the available exercises from the backend, allows the
-// user to add multiple exercise blocks to a schedule and submits the
-// completed schedule to the server. It provides simple success and
-// error messages and resets the form upon successful creation.
+// workoutSchedule.js
+// Handles creating a workout schedule with dynamic exercise blocks
+// Exercises are fetched based on the logged-in user, and each block includes
+// fields for sets, reps, weight, rest, and duration.
+
+const userId = localStorage.getItem('userId');
+if (!userId) {
+  alert('You must be logged in to view this page.');
+  window.location.href = 'login.html';
+}
 
 document.addEventListener('DOMContentLoaded', () => {
   fetchExercises();
-  // Add an initial exercise block so the user has something to fill in.
   addExerciseBlock();
 });
 
 let exerciseOptions = [];
 
-// Fetch the exercise library from the API and store it in the
-// exerciseOptions array. Once loaded, populate any existing select
-// elements in the form.
+// Fetch exercises for the logged-in user and update dropdowns
 async function fetchExercises() {
   try {
-    const res = await fetch('http://localhost:3000/api/exercises');
-    const data = await res.json();
-    exerciseOptions = data;
+    const response = await fetch(`http://localhost:3000/api/exercises?userId=${userId}`);
+    const data = await response.json();
+    exerciseOptions = data.map(ex => ({
+      id: ex.exerciseId || ex._id,
+      name: ex.name
+    }));
     updateAllDropdowns();
   } catch (err) {
     document.getElementById('message').textContent = 'Failed to fetch exercises.';
   }
 }
 
-// Populate all exercise drop‑downs with the current list of exercises.
+// Populate all exercise dropdowns with current options
 function updateAllDropdowns() {
   const selects = document.querySelectorAll('.exercise-select');
   selects.forEach(select => {
-    // Ensure the default option is present.
     select.innerHTML = '<option value="">Select Exercise</option>';
     exerciseOptions.forEach(ex => {
       const option = document.createElement('option');
-      option.value = ex._id;
+      option.value = ex.id;
       option.textContent = ex.name;
       select.appendChild(option);
     });
   });
 }
 
-// Add a new exercise block to the form. Each block contains fields
-// necessary to describe a single exercise in the schedule.
+// Dynamically add a new exercise block
 function addExerciseBlock() {
   const container = document.getElementById('exerciseList');
-  // Do not allow more than 15 exercise blocks to be added. This keeps
-  // the schedule manageable and avoids a long unwieldy form. If the
-  // limit is reached we simply return.
-  const existingBlocks = container.querySelectorAll('.exercise-block');
-  if (existingBlocks.length >= 15) {
-    const messageEl = document.getElementById('message');
-    if (messageEl) {
-      messageEl.textContent = 'You can only add up to 15 exercises in a schedule.';
-    }
-    return;
-  }
   const block = document.createElement('div');
   block.classList.add('exercise-block');
   block.innerHTML = `
@@ -94,18 +85,16 @@ function addExerciseBlock() {
   updateAllDropdowns();
 }
 
-// Handle schedule submission: gather form data, validate required fields and
-// send to the server. On success we reset the form and show a message.
+// Handle form submission and send schedule to the server
 document.getElementById('scheduleForm').addEventListener('submit', async function (e) {
   e.preventDefault();
   const form = e.target;
   const formData = new FormData(form);
   const data = Object.fromEntries(formData.entries());
 
-  // Gather exercise details from each block. If any required field is
-  // missing, show an error and abort submission.
   const exerciseBlocks = form.querySelectorAll('.exercise-block');
   const exercises = [];
+
   for (const block of exerciseBlocks) {
     const exerciseId = block.querySelector('[name="exerciseId"]').value;
     const sets = Number(block.querySelector('[name="sets"]').value);
@@ -113,18 +102,18 @@ document.getElementById('scheduleForm').addEventListener('submit', async functio
     const targetWeight = Number(block.querySelector('[name="targetWeight"]').value);
     const restInterval = Number(block.querySelector('[name="restInterval"]').value) || 0;
     const duration = Number(block.querySelector('[name="duration"]').value) || 0;
+
     if (!exerciseId || !sets || !reps || !targetWeight) {
       document.getElementById('message').textContent = 'Please fill all required exercise fields.';
       return;
     }
+
     exercises.push({ exerciseId, sets, reps, targetWeight, restInterval, duration });
   }
 
-  // Construct the schedule object to send to the API.
-  const scheduleId = 's' + Date.now();
   const scheduleData = {
-    scheduleId,
-    userId: data.userId,
+    scheduleId: 's' + Date.now(),
+    userId,
     dayOfWeek: data.dayOfWeek,
     scheduleTitle: data.scheduleTitle || '',
     exercises
@@ -136,12 +125,13 @@ document.getElementById('scheduleForm').addEventListener('submit', async functio
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(scheduleData)
     });
+
     const result = await response.json();
     if (response.ok) {
-      document.getElementById('message').textContent = 'Schedule created successfully!';
+      document.getElementById('message').textContent = '✅ Schedule created!';
       form.reset();
       document.getElementById('exerciseList').innerHTML = '';
-      addExerciseBlock();
+      addExerciseBlock(); // Add one fresh block
     } else {
       document.getElementById('message').textContent = `Error: ${result.error}`;
     }

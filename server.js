@@ -7,7 +7,6 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('✅ MongoDB connected'))
@@ -38,13 +37,43 @@ app.post('/api/users', async (req, res) => {
 // Route to get all users
 app.get('/api/users', async (req, res) => {
   try {
-    const users = await User.find(); // Fetch all users from the database
+    const users = await User.find();
     res.json(users);
   } catch (err) {
     res.status(500).json({ error: 'Failed to fetch users' });
   }
 });
 
+// ✅ Route to get a single user by userId (for auto-filling settings)
+app.get('/api/users/:userId', async (req, res) => {
+  const { userId } = req.params;
+  try {
+    const user = await User.findOne({ userId });
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    res.json(user);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch user' });
+  }
+});
+
+// Route to update a user profile by userId
+app.put('/api/users/update', async (req, res) => {
+  const { userId, ...updateData } = req.body;
+  if (!userId) {
+    return res.status(400).json({ error: 'userId is required for update' });
+  }
+  try {
+    const updatedUser = await User.findOneAndUpdate({ userId }, updateData, { new: true });
+    if (!updatedUser) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    res.json(updatedUser);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
 
 // Route to create an exercise
 app.post('/api/exercises', async (req, res) => {
@@ -56,16 +85,17 @@ app.post('/api/exercises', async (req, res) => {
   }
 });
 
-// Route to get all exercises
+// Route to get all exercises for a user
 app.get('/api/exercises', async (req, res) => {
+  const userId = req.query.userId;
+  if (!userId) return res.status(400).json({ error: 'Missing userId' });
   try {
-    const exercises = await Exercise.find();
+    const exercises = await Exercise.find({ userId });
     res.json(exercises);
   } catch (err) {
     res.status(500).json({ error: 'Failed to fetch exercises' });
   }
 });
-
 
 // Route to create a workout schedule
 app.post('/api/schedules', async (req, res) => {
@@ -77,18 +107,19 @@ app.post('/api/schedules', async (req, res) => {
   }
 });
 
-
-
-// Route to get all workout schedules
+// Route to get all workout schedules for a user
 app.get('/api/schedules', async (req, res) => {
+  const userId = req.query.userId;
+  if (!userId) return res.status(400).json({ error: 'Missing userId' });
   try {
-    const schedules = await WorkoutSchedule.find();
+    const schedules = await WorkoutSchedule.find({ userId });
     res.json(schedules);
   } catch (err) {
     res.status(500).json({ error: 'Failed to fetch workout schedules' });
   }
 });
 
+// Route to get a single workout schedule by scheduleId
 app.get('/api/schedules/:id', async (req, res) => {
   try {
     const schedule = await WorkoutSchedule.findOne({ scheduleId: req.params.id });
@@ -109,16 +140,17 @@ app.post('/api/workouts', async (req, res) => {
   }
 });
 
-
+// Route to get all workout logs for a user
 app.get('/api/workouts', async (req, res) => {
+  const userId = req.query.userId;
+  if (!userId) return res.status(400).json({ error: 'Missing userId' });
   try {
-    const logs = await WorkoutLog.find();
+    const logs = await WorkoutLog.find({ userId });
     res.json(logs);
   } catch (err) {
     res.status(500).json({ error: 'Failed to fetch workout logs' });
   }
 });
-
 
 // Route to create a check-in log
 app.post('/api/checkins', async (req, res) => {
@@ -130,18 +162,19 @@ app.post('/api/checkins', async (req, res) => {
   }
 });
 
-// Route to get all check-in logs
+// Route to get all check-in logs for a user
 app.get('/api/checkins', async (req, res) => {
+  const userId = req.query.userId;
+  if (!userId) return res.status(400).json({ error: 'Missing userId' });
   try {
-    const checkIns = await CheckInLog.find(); // Fetch all check-in entries
+    const checkIns = await CheckInLog.find({ userId });
     res.json(checkIns);
   } catch (err) {
     res.status(500).json({ error: 'Failed to fetch check-in logs' });
   }
 });
 
-
-// Start server
+// Start the server
 app.listen(3000, () => {
   console.log('🚀 Server running on http://localhost:3000');
 });
