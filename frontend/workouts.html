@@ -22,18 +22,48 @@
     </nav>
 
     <main>
-      <h2>Workouts</h2>
-      <p>Select an action to get started:</p>
-      <div class="form-group">
-        <button onclick="location.href='workoutLog.html'">Log a Workout</button>
-        <button onclick="location.href='workoutSchedule.html'">Plan a Schedule</button>
-        <button onclick="location.href='exerciseLab.html'">Add Exercise</button>
-        <button onclick="location.href='checkInLog.html'">Check‑In</button>
+      <h2>Workout Center</h2>
+      <p>Plan, track, and manage all your workout activities in one place.</p>
+      
+      <!-- Your Workout Plans -->
+      <div class="card">
+        <h3>Your Workout Plans</h3>
+        <div id="workout-plans" class="btn-grid">
+          <p class="message-container">Loading your workout plans...</p>
+        </div>
+      </div>
+
+      <!-- Workout Actions -->
+      <div class="card">
+        <h3>Workout Management</h3>
+        <div class="action-grid">
+          <button class="btn btn-primary" onclick="location.href='workoutLog.html'">
+            Start Workout Session
+          </button>
+          <button class="btn btn-primary" onclick="location.href='workoutSchedule.html'">
+            Create Workout Plan
+          </button>
+        </div>
+      </div>
+
+      <!-- Exercise Management -->
+      <div class="card">
+        <h3>Exercise Library</h3>
+        <p>Build and customize your exercise database:</p>
+        <div class="action-grid">
+          <button class="btn btn-secondary" onclick="location.href='exerciseLab.html'">
+            Add New Exercise
+          </button>
+          <button class="btn btn-secondary" onclick="location.href='exerciseLab.html'">
+            Browse Exercise Library
+          </button>
+        </div>
       </div>
     </main>
   </div>
 
   <!-- authentication script ensures a user is logged in and exposes logout() -->
   <script src="auth.js"></script>
+  <script src="workouts.js"></script>
 </body>
 </html>

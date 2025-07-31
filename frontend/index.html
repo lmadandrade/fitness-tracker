@@ -25,14 +25,29 @@
     <main>
       <h2>Welcome to FitTracker</h2>
       <p>
-        Use the navigation to manage your workouts, exercises and check-ins.
-        Start logging your fitness journey today!
+        Your personal fitness companion. Track your progress, plan your workouts, and achieve your goals.
       </p>
-      <div class="form-group">
-        <button onclick="location.href='workoutLog.html'">Log a Workout</button>
-        <button onclick="location.href='workoutSchedule.html'">Plan a Schedule</button>
-        <button onclick="location.href='exerciseLab.html'">Add Exercise</button>
-        <button onclick="location.href='checkInLog.html'">Check‑In</button>
+      
+
+
+      <!-- Quick Actions -->
+      <div class="card">
+        <h3>Quick Actions</h3>
+        <p>Get started with these common tasks:</p>
+        <div class="action-grid">
+          <button class="btn btn-primary" onclick="location.href='workoutLog.html'">
+            Log Today's Workout
+          </button>
+          <button class="btn btn-primary" onclick="location.href='checkInLog.html'">
+            Record Check-In
+          </button>
+          <button class="btn btn-secondary" onclick="location.href='workoutSchedule.html'">
+            Plan Schedule
+          </button>
+          <button class="btn btn-secondary" onclick="location.href='exerciseLab.html'">
+            Manage Exercises
+          </button>
+        </div>
       </div>
     </main>
   </div>
