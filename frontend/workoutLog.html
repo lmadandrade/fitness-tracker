@@ -5,16 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Log Workout - FitTracker</title>
   <link rel="stylesheet" href="style.css" />
+
+
 </head>
 <body>
-  <!-- Site header -->
+  <!-- title -->
   <header class="site-header">
     <h1>FitTracker</h1>
     <button class="logout-btn" onclick="logout()">Logout</button>
   </header>
 
   <div class="wrapper">
-    <!-- Sidebar navigation -->
+
+    <!-- menu -->
+
     <nav>
       <a href="index.html">Home</a>
       <a href="workouts.html">Workouts</a>
@@ -24,6 +28,7 @@
     </nav>
 
     <!-- Main content -->
+
     <main>
       <h2>Log a Workout</h2>
 
@@ -34,7 +39,7 @@
           <input type="date" id="date" name="date" required />
         </div>
 
-        <!-- Scheduled Workout Selector -->
+        <!-- Scheduled workout selector -->
         <div class="form-group">
           <label for="scheduledWorkoutId">Scheduled Workout</label>
           <select id="scheduledWorkoutId" name="scheduledWorkoutId">
@@ -69,11 +74,11 @@
         <div class="skip-hide">
           <h3>Exercise Logging</h3>
           
-          <!-- Scheduled exercises with input fields -->
+          <!-- scheduled exercises field -->
           <div id="scheduledExercisesSection" class="card" style="display: none;">
             <h4>Scheduled Exercises</h4>
             <div id="scheduledExercises" class="exercise-layout two-col-exercise">
-              <!-- Planned and Actual Exercise will be rendered here -->
+      
             </div>
           </div>
 
@@ -87,20 +92,21 @@
           </div>
         </div>
 
-        <!-- Form actions -->
+        <!-- Form buttons -->
         <div class="form-group">
           <button type="button" class="secondary" onclick="resetForm()">Reset</button>
           <button type="submit">Save Workout</button>
         </div>
 
-        <!-- Message container -->
+        <!-- error display -->
         <div id="message" class="message-container"></div>
       </form>
     </main>
   </div>
 
-  <!-- Scripts -->
+
   <script src="auth.js"></script>
   <script src="workoutLog.js"></script>
+  
 </body>
 </html>

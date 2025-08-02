@@ -5,16 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Check-In Log - FitTracker</title>
   <link rel="stylesheet" href="style.css" />
+
 </head>
+
 <body>
-  <!-- Site header -->
+  <!-- title and logout button-->
   <header class="site-header">
     <h1>FitTracker</h1>
     <button class="logout-btn" onclick="logout()">Logout</button>
   </header>
 
   <div class="wrapper">
-    <!-- Sidebar navigation -->
+    <!-- left menu -->
     <nav>
       <a href="index.html">Home</a>
       <a href="workouts.html">Workouts</a>
@@ -23,22 +25,27 @@
       <a href="settings.html">Settings</a>
     </nav>
 
-    <!-- Main content -->
+    <!-- Main Content -->
     <main>
       <h2>Check-In Log</h2>
+
+      <!-- this form lets us check in and track stuff -->
       <form id="checkInForm">
         <input type="hidden" id="userId" name="userId" />
 
+        <!-- choose date of the checkin -->
         <div class="form-group">
           <label for="date">Date</label>
           <input type="date" id="date" name="date" required />
         </div>
 
+        <!-- slider for energy level -->
         <div class="form-group">
           <label for="energyLevel">Energy Level: <span id="energyValue">5</span></label>
           <input type="range" id="energyLevel" name="energyLevel" min="1" max="10" value="5" />
         </div>
 
+        <!-- choose mood from options -->
         <div class="form-group">
           <label for="mood">Mood</label>
           <select id="mood" name="mood">
@@ -52,11 +59,13 @@
           </select>
         </div>
 
+        <!-- weight input -->
         <div class="form-group">
           <label for="bodyWeight">Body Weight</label>
           <input type="number" id="bodyWeight" name="bodyWeight" step="0.1" />
         </div>
 
+        <!-- extra measurements if user wants -->
         <h3>Body Measurements (cm)</h3>
         <div class="two-col">
           <div class="form-group">
@@ -85,33 +94,35 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label for="progressPhotoUrl">Progress Photo URL</label>
-          <input type="text" id="progressPhotoUrl" name="progressPhotoUrl" />
-        </div>
-
+        <!-- note -->
         <div class="form-group">
           <label for="note">Notes</label>
           <textarea id="note" name="note" placeholder="How did you feel?"></textarea>
         </div>
 
+        <!-- submit button -->
         <div class="form-group">
           <button type="submit">Submit Check-In</button>
         </div>
 
+        <!-- success or error messages -->
         <p id="message" class="message-container"></p>
       </form>
 
+      <!-- history of user checkins -->
       <h3>Your Previous Check-Ins</h3>
       <div id="checkInList" class="btn-grid">
-        <!-- Check-ins will be loaded here from API using existing .card styles -->
+        <!-- message while loading -->
         <p class="message-container">Loading your check-in history...</p>
       </div>
     </main>
   </div>
 
-  <!-- Scripts -->
+
+
   <script src="auth.js"></script>
   <script src="checkInLog.js"></script>
+
+  
 </body>
 </html>

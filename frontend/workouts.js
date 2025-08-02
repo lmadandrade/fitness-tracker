@@ -1,31 +1,35 @@
+// workouts.js - show all the user plans and what he already did
+
 document.addEventListener('DOMContentLoaded', () => {
   const userId = localStorage.getItem('userId');
+
+  // check if user is logged
   if (!userId) {
-    const plansContainer = document.getElementById('workout-plans');
-    if (plansContainer) {
-      plansContainer.innerHTML = '<p>Please log in to see your workout plans.</p>';
-    }
-    const pastWorkoutsContainer = document.getElementById('past-workouts');
-    if (pastWorkoutsContainer) {
-      pastWorkoutsContainer.innerHTML = '<p>Please log in to see your past workouts.</p>';
-    }
+    const plans = document.getElementById('workout-plans');
+    if (plans) plans.innerHTML = '<p>Please log in to see your workout plans.</p>';
+
+    const past = document.getElementById('past-workouts');
+    if (past) past.innerHTML = '<p>Please log in to see your past workouts.</p>';
     return;
   }
 
+  // Get all plans and past workouts from db
   loadWorkoutPlans(userId);
   loadPastWorkouts(userId);
 });
 
-function loadWorkoutPlans(userId) {
-  const plansContainer = document.getElementById('workout-plans');
-  if (!plansContainer) return;
 
-  fetch(`http://localhost:3000/api/schedules?userId=${userId}`  )
+// This loads the workout plans from backend
+function loadWorkoutPlans(userId) {
+  const plansEl = document.getElementById('workout-plans');
+  if (!plansEl) return;
+
+  fetch(`http://localhost:3000/api/schedules?userId=${userId}`)
     .then(res => res.json())
     .then(data => {
-      plansContainer.innerHTML = '';
+      plansEl.innerHTML = '';
       if (data.length === 0) {
-        plansContainer.innerHTML = '<p>No workout plans found.</p>';
+        plansEl.innerHTML = '<p>No workout plans found.</p>';
         return;
       }
 
@@ -43,100 +47,113 @@ function loadWorkoutPlans(userId) {
           </div>
         `;
 
-        plansContainer.appendChild(card);
+        plansEl.appendChild(card);
       });
     })
     .catch(err => {
-      console.error('❌ Error fetching workout plans:', err);
-      plansContainer.innerHTML = '<p class="error">Failed to load workout plans.</p>';
+      console.error('Error fetching workout plans:', err);
+      plansEl.innerHTML = '<p class="error">Failed to load workout plans.</p>';
     });
 }
 
+
+// this shows the old workouts that the user did or skipped
 async function loadPastWorkouts(userId) {
-  const pastWorkoutsContainer = document.getElementById('past-workouts');
-  if (!pastWorkoutsContainer) return;
+  const pastEl = document.getElementById('past-workouts');
+  if (!pastEl) return;
 
   try {
-    // Fetch both workouts and schedules at the same time
     const [workoutsRes, schedulesRes] = await Promise.all([
-      fetch(`http://localhost:3000/api/workouts?userId=${userId}`  ),
-      fetch(`http://localhost:3000/api/schedules?userId=${userId}`  )
+      fetch(`http://localhost:3000/api/workouts?userId=${userId}`),
+      fetch(`http://localhost:3000/api/schedules?userId=${userId}`)
     ]);
 
     const workouts = await workoutsRes.json();
     const schedules = await schedulesRes.json();
 
-    // Create a simple map for quick lookup of schedule titles
     const scheduleMap = new Map(schedules.map(s => [s.scheduleId, s.scheduleTitle]));
 
-    pastWorkoutsContainer.innerHTML = '';
+    pastEl.innerHTML = '';
     if (workouts.length === 0) {
-      pastWorkoutsContainer.innerHTML = '<p>No past workouts found.</p>';
+      pastEl.innerHTML = '<p>No past workouts found.</p>';
       return;
     }
 
+    // sort by most recent
     workouts.sort((a, b) => new Date(b.date) - new Date(a.date));
 
     workouts.forEach(workout => {
       const card = document.createElement('div');
       card.className = 'btn-outline';
-      
+
       const workoutDate = new Date(workout.date).toLocaleDateString();
-      
-      // **FIX:** Check if workout.scheduledWorkoutId exists and is in the map.
-      // If it is, use the title from the map. Otherwise, default to 'Ad-hoc Workout'.
+
       const scheduleTitle = (workout.scheduledWorkoutId && scheduleMap.has(workout.scheduledWorkoutId))
         ? scheduleMap.get(workout.scheduledWorkoutId)
-        : 'Ad-hoc Workout';
+        : '"Workout Plan Deleted"';
 
-      card.innerHTML = `
-  <h4>Workout on ${workoutDate}</h4>
-  <p><strong>Exercises Logged:</strong> ${workout.exercises.length}</p>
-  <div style="margin-top: 10px;">
-      <button class="secondary" onclick="deleteWorkout('${workout.logId}')">Delete</button>
-  </div>
-`;
+      // build text for skipped or not
+      let body = `<h4>${scheduleTitle} on ${workoutDate}</h4>`;
 
+      if (workout.wasSkipped) {
+        body += `<p><strong>Status:</strong> Skipped</p>`;
+      } else {
+        const count = workout.exercises && workout.exercises.length ? workout.exercises.length : 0;
+        body += `<p><strong>Exercises Logged:</strong> ${count}</p>`;
+      }
 
-      pastWorkoutsContainer.appendChild(card);
+      body += `
+        <div style="margin-top: 10px;">
+          <button class="secondary" onclick="deleteWorkout('${workout.logId}')">Delete</button>
+        </div>
+      `;
+
+      card.innerHTML = body;
+      pastEl.appendChild(card);
     });
+
   } catch (err) {
-    console.error('❌ Error fetching past workouts:', err);
-    pastWorkoutsContainer.innerHTML = '<p class="error">Failed to load past workouts.</p>';
+    console.error('Error fetching past workouts:', err);
+    pastEl.innerHTML = '<p class="error">Failed to load past workouts.</p>';
   }
 }
 
+
+// Go to edit page for the workout plan
 function editPlan(scheduleId) {
-  // Redirect to the schedule page with the ID as a URL parameter
   window.location.href = `workoutSchedule.html?edit=${scheduleId}`;
 }
 
+
+// delete plan and reload screen
 function deletePlan(scheduleId) {
   fetch(`http://localhost:3000/api/schedules/${scheduleId}`, {
     method: 'DELETE',
-  }  )
+  })
   .then(res => {
     if (res.ok) {
-      // **FIX:** Reload both plans and past workouts after deleting a plan
-      loadWorkoutPlans(localStorage.getItem('userId'));
+      const uid = localStorage.getItem('userId');
+      loadWorkoutPlans(uid);
+      loadPastWorkouts(uid);
+    }
+  })
+  .catch(err => {
+    console.error('Error deleting workout plan:', err);
+  });
+}
+
+
+// delete a log workout
+function deleteWorkout(logId) {
+  fetch(`http://localhost:3000/api/workouts/${logId}`, {
+    method: 'DELETE',
+  })
+  .then(res => {
+    if (res.ok) {
       loadPastWorkouts(localStorage.getItem('userId'));
     }
   })
   .catch(err => {
-    console.error('❌ Error deleting workout plan:', err);
+    console.error('Error deleting workout log:', err);
   });
-}
-
-function deleteWorkout(logId) {
-    fetch(`http://localhost:3000/api/workouts/${logId}`, {
-        method: 'DELETE',
-    }  )
-    .then(res => {
-        if (res.ok) {
-            loadPastWorkouts(localStorage.getItem('userId'));
-        }
-    })
-    .catch(err => {
-        console.error('❌ Error deleting workout log:', err);
-    });
 }

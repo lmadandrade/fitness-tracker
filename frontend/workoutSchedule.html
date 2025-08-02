@@ -5,16 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Create Workout Schedule - FitTracker</title>
   <link rel="stylesheet" href="style.css" />
+
+
 </head>
+
 <body>
-  <!-- Site header -->
+
+  <!-- Title -->
   <header class="site-header">
     <h1>FitTracker</h1>
     <button class="logout-btn" onclick="logout()">Logout</button>
   </header>
 
   <div class="wrapper">
-    <!-- Sidebar navigation -->
+
+    <!-- menu bar -->
     <nav>
       <a href="index.html">Home</a>
       <a href="workouts.html">Workouts</a>
@@ -26,13 +31,17 @@
     <!-- Main content -->
     <main>
       <h2>Create Workout Schedule</h2>
+
+    
       <form id="scheduleForm">
-        <!-- Hidden userId is automatically populated by auth.js -->
+
+        <!-- Hidden userId -->
         <input type="hidden" id="userId" name="userId" />
         <div class="form-group">
-          <label for="scheduleTitle">Schedule Title (optional)</label>
+          <label for="scheduleTitle">Schedule Title</label>
           <input type="text" id="scheduleTitle" name="scheduleTitle" />
         </div>
+
         <div class="form-group">
           <label for="dayOfWeek">Day of the Week</label>
           <select id="dayOfWeek" name="dayOfWeek" required>
@@ -46,22 +55,30 @@
             <option value="Sunday">Sunday</option>
           </select>
         </div>
-        <!-- Container where exercise inputs will be added dynamically -->
+
+        <!-- container to add exercises -->
+
         <div id="exerciseList" class="exercise-layout"></div>
+
         <div class="form-group">
           <button type="button" class="secondary" onclick="addExerciseBlock()">Add Exercise</button>
         </div>
+
         <div class="form-group">
           <button type="reset" class="secondary">Reset</button>
           <button type="submit">Save Schedule</button>
         </div>
         <p id="message" class="message-container"></p>
       </form>
+
     </main>
+
   </div>
 
-  <!-- Include auth.js to enforce login and populate userId -->
+
   <script src="auth.js"></script>
   <script src="workoutSchedule.js"></script>
+  
 </body>
+
 </html>

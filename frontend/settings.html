@@ -7,13 +7,15 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- Site header -->
+  <!-- Title -->
+
   <header class="site-header">
     <h1>FitTracker</h1>
     <button class="logout-btn" onclick="logout()">Logout</button>
   </header>
   <div class="wrapper">
-    <!-- Sidebar navigation -->
+
+    <!-- menu -->
     <nav>
       <a href="index.html">Home</a>
       <a href="workouts.html">Workouts</a>
@@ -21,6 +23,7 @@
       <a href="checkInLog.html">Progress</a>
       <a href="settings.html" class="active">Settings</a>
     </nav>
+
     <!-- Main content -->
     <main>
       <h2>User Settings</h2>
@@ -29,10 +32,12 @@
           <label for="name">Full Name</label>
           <input type="text" id="name" name="name" required />
         </div>
+
         <div class="form-group">
           <label for="email">Email</label>
           <input type="email" id="email" name="email" required />
         </div>
+        
         <div class="form-group two-col">
           <div>
             <label for="age">Age</label>
@@ -43,10 +48,12 @@
             <input type="number" id="height" name="height" min="100" max="250" />
           </div>
         </div>
+
         <div class="form-group">
           <label for="weight">Weight (kg)</label>
           <input type="number" id="weight" name="weight" step="0.1" min="30" max="300" />
         </div>
+
         <div class="form-group">
           <label for="experienceLevel">Experience Level</label>
           <select id="experienceLevel" name="experienceLevel">
@@ -56,15 +63,18 @@
             <option value="advanced">Advanced</option>
           </select>
         </div>
+
         <div class="form-group">
           <button type="reset" class="secondary">Reset</button>
           <button type="submit">Save Changes</button>
         </div>
+
         <p id="message" class="message-container"></p>
       </form>
     </main>
   </div>
-  <!-- Include auth.js to enforce login and populate userId -->
+
+ 
   <script src="auth.js"></script>
   <script src="settings.js"></script>
 </body>

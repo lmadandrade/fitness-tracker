@@ -7,14 +7,15 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- Site header -->
+
+  <!-- tittle -->
   <header class="site-header">
     <h1>FitTracker</h1>
     <button class="logout-btn" onclick="logout()">Logout</button>
   </header>
 
   <div class="wrapper">
-    <!-- Sidebar navigation -->
+    <!-- Side menus -->
     <nav>
       <a href="index.html">Home</a>
       <a href="workouts.html">Workouts</a>
@@ -27,21 +28,24 @@
     <main>
       <h2>Add or Edit Exercise</h2>
       <form id="exerciseForm">
-        <!-- Hidden field for editing -->
+
         <input type="hidden" id="editingExerciseId" name="editingExerciseId" />
 
         <div class="form-group">
           <label for="name">Exercise Name</label>
           <input type="text" id="name" name="name" required />
         </div>
+
         <div class="form-group">
           <label for="muscleGroup">Muscle Group</label>
           <input type="text" id="muscleGroup" name="muscleGroup" required />
         </div>
+
         <div class="form-group">
           <label for="equipment">Equipment</label>
           <input type="text" id="equipment" name="equipment" required />
         </div>
+
         <div class="form-group">
           <label for="type">Type</label>
           <select id="type" name="type" required>
@@ -52,24 +56,28 @@
             <option value="stretch">Stretch</option>
           </select>
         </div>
+
         <div class="form-group">
           <label for="description">Description (optional)</label>
           <textarea id="description" name="description" placeholder="How to perform the exercise"></textarea>
         </div>
+
         <div class="form-group">
           <button type="reset" class="secondary">Reset</button>
           <button type="submit" id="submitBtn">Save Exercise</button>
         </div>
+
         <p id="message" class="message-container"></p>
       </form>
 
-      <!-- List of existing exercises will appear here -->
+      <!-- list of existing exercises  -->
       <div id="exerciseList" class="exercise-list"></div>
     </main>
   </div>
 
-  <!-- Scripts -->
   <script src="auth.js"></script>
   <script src="exerciseLab.js"></script>
+
 </body>
+
 </html>

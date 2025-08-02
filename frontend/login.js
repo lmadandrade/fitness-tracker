@@ -1,48 +1,45 @@
-/*
- * login.js
- *
- * This script powers the simple login page. Users provide their
- * email and password, which are checked against a list of locally
- * stored credentials. On success, the corresponding userId is
- * saved to localStorage and the user is redirected into the app.
- *
- * NOTE: Because the backend does not persist passwords, we store
- * credential data in the browser's localStorage under the key
- * "authUsers". Each entry contains an email, password and
- * associated userId. This is purely for demonstration purposes
- * within a single browser session and is not secure.
- */
+// login.js - login page logic
+// when user types email + password, we send to server to check
 
 document.addEventListener('DOMContentLoaded', () => {
   const loginForm = document.getElementById('loginForm');
   const messageEl = document.getElementById('message');
 
-  // Handle submission of the login form.
-  loginForm.addEventListener('submit', e => {
+  // when user clicks login
+  loginForm.addEventListener('submit', async (e) => {
     e.preventDefault();
+
     const email = document.getElementById('email').value.trim();
     const password = document.getElementById('password').value;
 
+    // make sure they type both fields
     if (!email || !password) {
-      messageEl.textContent = 'Please enter both email and password.';
+      messageEl.textContent = 'Please type both email and password.';
       return;
     }
 
-    // Retrieve stored credentials from localStorage. If none exist,
-    // initialise an empty array.
-    const stored = JSON.parse(localStorage.getItem('authUsers') || '[]');
+    try {
+      // send email and password to server
+      const res = await fetch('http://localhost:3000/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      });
 
-    // Look for a matching user entry with the same email and password.
-    const entry = stored.find(
-      u => u.email.toLowerCase() === email.toLowerCase() && u.password === password
-    );
+      const result = await res.json();
 
-    if (entry) {
-      // Save the associated userId and redirect to the home page.
-      localStorage.setItem('userId', entry.userId);
-      window.location.href = 'index.html';
-    } else {
-      messageEl.textContent = 'Invalid email or password. Please try again.';
+      if (res.ok) {
+        // if correct → save userId in localStorage and go to homepage
+        localStorage.setItem('userId', result.userId);
+        window.location.href = 'index.html';
+      } else {
+        // if wrong login
+        messageEl.textContent = result.error || 'Wrong email or password.';
+      }
+
+    } catch (err) {
+      // if server broke or not open
+      messageEl.textContent = 'Could not connect to server.';
     }
   });
 });

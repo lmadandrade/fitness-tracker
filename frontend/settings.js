@@ -1,9 +1,10 @@
-// settings.js
-// This script loads the user's current data into the settings form
-// and handles updates via PUT to /api/users/update
+// this is for user to change his profile info
+// we load the data when page loads, and let him save changes
 
 document.addEventListener('DOMContentLoaded', async () => {
+
   const userId = localStorage.getItem('userId');
+
   const messageEl = document.getElementById('message');
 
   if (!userId) {
@@ -14,11 +15,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   try {
     const response = await fetch(`http://localhost:3000/api/users/${userId}`);
-    if (!response.ok) throw new Error('Failed to fetch user data');
+
+    if (!response.ok) throw new Error('Could not get user');
 
     const user = await response.json();
 
-    // Populate form fields
+    // filling the form with info from user
     document.getElementById('name').value = user.name || '';
     document.getElementById('email').value = user.email || '';
     document.getElementById('age').value = user.age || '';
@@ -27,42 +29,51 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('experienceLevel').value = user.experienceLevel || '';
 
   } catch (err) {
-    messageEl.textContent = '❌ Could not load user profile.';
+       // If something fails
+    messageEl.textContent = 'Could not load user profile.';
     messageEl.classList.add('error');
   }
 });
 
+// When user presses save, we update it
 document.getElementById('userSettingsForm').addEventListener('submit', async function (e) {
   e.preventDefault();
 
   const userId = localStorage.getItem('userId');
   if (!userId) {
+
     alert('You must be logged in.');
     return;
   }
 
   const formData = new FormData(this);
   const data = Object.fromEntries(formData.entries());
-  data.userId = userId; // Ensure userId is included in the update
+
+  data.userId = userId;
 
   try {
-    const response = await fetch('http://localhost:3000/api/users/update', {
+    const res = await fetch('http://localhost:3000/api/users/update', {
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify(data)
     });
 
-    const result = await response.json();
+    const result = await res.json();
+
     const messageEl = document.getElementById('message');
 
-    if (response.ok) {
-      messageEl.textContent = '✅ Profile updated successfully!';
+    if (res.ok) {
+      messageEl.textContent = 'Profile updated successfully!';
       messageEl.classList.add('success');
     } else {
-      messageEl.textContent = `❌ Error: ${result.error}`;
+      messageEl.textContent = `Error: ${result.error}` ;
       messageEl.classList.add('error');
     }
+
   } catch (err) {
-    document.getElementById('message').textContent = '❌ Failed to connect to server.';
+    document.getElementById('message').textContent = 'Failed to connect to server.';
+    
   }
 });

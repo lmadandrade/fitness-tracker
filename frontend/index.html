@@ -7,13 +7,15 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- Top header with site title -->
+
+  <!-- Title and logout -->
   <header class="site-header">
     <h1>FitTracker</h1>
     <button class="logout-btn" onclick="logout()">Logout</button>
   </header>
+
   <div class="wrapper">
-    <!-- Sidebar navigation -->
+    <!-- sidebar to go to other pages -->
     <nav>
       <a href="index.html" class="active">Home</a>
       <a href="workouts.html">Workouts</a>
@@ -21,19 +23,20 @@
       <a href="checkInLog.html">Progress</a>
       <a href="settings.html">Settings</a>
     </nav>
-    <!-- Main content area -->
+
+    <!-- Main Content -->
     <main>
       <h2>Welcome to FitTracker</h2>
       <p>
-        Your personal fitness companion. Track your progress, plan your workouts, and achieve your goals.
+        Your personal fitness companion. Track your progress, plan your workouts, and achieve your goals!
       </p>
-      
 
-
-      <!-- Quick Actions -->
+      <!-- fast access stuff -->
       <div class="card">
         <h3>Quick Actions</h3>
-        <p>Get started with these common tasks:</p>
+        <p>Get started:</p>
+        
+        <!-- buttons for quick tasks -->
         <div class="action-grid">
           <button class="btn btn-primary" onclick="location.href='workoutLog.html'">
             Log Today's Workout
@@ -42,16 +45,20 @@
             Record Check-In
           </button>
           <button class="btn btn-secondary" onclick="location.href='workoutSchedule.html'">
-            Plan Schedule
+            Plan Workout
           </button>
           <button class="btn btn-secondary" onclick="location.href='exerciseLab.html'">
             Manage Exercises
           </button>
         </div>
       </div>
+      
     </main>
   </div>
-  <!-- authentication script ensures a user is logged in and exposes logout() -->
+
+
+
+  <!-- makes sure user is logged in and allows logout -->
   <script src="auth.js"></script>
 </body>
 </html>
