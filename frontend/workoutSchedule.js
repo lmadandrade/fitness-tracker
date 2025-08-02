@@ -1,21 +1,27 @@
-// workoutSchedule.js
-// Handles creating a workout schedule with dynamic exercise blocks
-
 const userId = localStorage.getItem('userId');
 if (!userId) {
-  alert('You must be logged in to view this page.');
   window.location.href = 'login.html';
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  fetchExercises();
-  addExerciseBlock();
+let exerciseOptions = [];
+let exerciseTypeMap = {};
+let editingScheduleId = null;
+
+document.addEventListener('DOMContentLoaded', async () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  editingScheduleId = urlParams.get('edit');
+
+  await fetchExercises();
+
+  if (editingScheduleId) {
+    document.querySelector('h2').textContent = 'Edit Workout Schedule';
+    document.querySelector('button[type="submit"]').textContent = 'Update Schedule';
+    loadScheduleForEditing(editingScheduleId);
+  } else {
+    addExerciseBlock();
+  }
 });
 
-let exerciseOptions = [];
-let exerciseTypeMap = {}; // Map to store exerciseId -> type
-
-// Fetch exercises for the logged-in user and update dropdowns
 async function fetchExercises() {
   try {
     const response = await fetch(`http://localhost:3000/api/exercises?userId=${userId}`);
@@ -25,13 +31,28 @@ async function fetchExercises() {
       exerciseTypeMap[id] = ex.type;
       return { id, name: ex.name };
     });
-    updateAllDropdowns();
   } catch (err) {
     document.getElementById('message').textContent = 'Failed to fetch exercises.';
   }
 }
 
-// Populate all exercise dropdowns with current options
+async function loadScheduleForEditing(scheduleId) {
+  try {
+    const res = await fetch(`http://localhost:3000/api/schedules/${scheduleId}`);
+    const schedule = await res.json();
+    document.getElementById('scheduleTitle').value = schedule.scheduleTitle;
+    document.getElementById('dayOfWeek').value = schedule.dayOfWeek;
+
+    const container = document.getElementById('exerciseList');
+    container.innerHTML = '';
+    schedule.exercises.forEach(exercise => {
+      addExerciseBlock(exercise);
+    });
+  } catch (err) {
+    document.getElementById('message').textContent = 'Failed to load schedule data.';
+  }
+}
+
 function updateAllDropdowns() {
   const selects = document.querySelectorAll('.exercise-select');
   selects.forEach(select => {
@@ -49,7 +70,6 @@ function updateAllDropdowns() {
   });
 }
 
-// Show/hide ❌ buttons based on block count
 function updateRemoveButtonsVisibility() {
   const allBlocks = document.querySelectorAll('.exercise-block');
   const allRemoveBtns = document.querySelectorAll('.remove-btn');
@@ -58,8 +78,7 @@ function updateRemoveButtonsVisibility() {
   });
 }
 
-// Dynamically add a new exercise block
-function addExerciseBlock() {
+function addExerciseBlock(data = {}) {
   const container = document.getElementById('exerciseList');
   const block = document.createElement('div');
   block.classList.add('exercise-block');
@@ -71,9 +90,7 @@ function addExerciseBlock() {
     <div class="form-grid">
       <div class="form-group">
         <label>Exercise</label>
-        <select class="exercise-select" required name="exerciseId">
-          <option value="">Select Exercise</option>
-        </select>
+        <select class="exercise-select" required name="exerciseId"></select>
       </div>
       <div class="form-group sets-group">
         <label>Sets</label>
@@ -102,34 +119,23 @@ function addExerciseBlock() {
   container.appendChild(block);
   updateAllDropdowns();
 
+  if (data.exerciseId) {
+    block.querySelector('[name="exerciseId"]').value = data.exerciseId;
+    block.querySelector('[name="sets"]').value = data.sets;
+    block.querySelector('[name="reps"]').value = data.reps;
+    block.querySelector('[name="targetWeight"]').value = data.targetWeight;
+    block.querySelector('[name="restInterval"]').value = data.restInterval;
+    block.querySelector('[name="duration"]').value = data.duration;
+  }
+
   const select = block.querySelector('.exercise-select');
-  const sets = block.querySelector('.sets-group');
-  const reps = block.querySelector('.reps-group');
-  const weight = block.querySelector('.weight-group');
-  const rest = block.querySelector('.rest-group');
-  const duration = block.querySelector('.duration-group');
-
   select.addEventListener('change', () => {
-    const type = exerciseTypeMap[select.value];
-    if (type === 'cardio' || type === 'stretch') {
-      sets.style.display = 'none';
-      reps.style.display = 'none';
-      weight.style.display = 'none';
-      rest.style.display = 'none';
-      duration.style.display = 'block';
-    } else {
-      sets.style.display = 'block';
-      reps.style.display = 'block';
-      weight.style.display = 'block';
-      rest.style.display = 'block';
-      duration.style.display = 'none';
-    }
+    // Logic for type-based visibility (if needed)
   });
+  select.dispatchEvent(new Event('change'));
 
-  const removeBtn = block.querySelector('.remove-btn');
-  removeBtn.addEventListener('click', () => {
-    const allBlocks = document.querySelectorAll('.exercise-block');
-    if (allBlocks.length > 1) {
+  block.querySelector('.remove-btn').addEventListener('click', () => {
+    if (document.querySelectorAll('.exercise-block').length > 1) {
       block.remove();
       updateRemoveButtonsVisibility();
     }
@@ -138,60 +144,50 @@ function addExerciseBlock() {
   updateRemoveButtonsVisibility();
 }
 
-// Handle form submission and send schedule to the server
 document.getElementById('scheduleForm').addEventListener('submit', async function (e) {
   e.preventDefault();
   const form = e.target;
   const formData = new FormData(form);
   const data = Object.fromEntries(formData.entries());
 
-  const exerciseBlocks = form.querySelectorAll('.exercise-block');
-  const exercises = [];
-
-  for (const block of exerciseBlocks) {
-    const exerciseId = block.querySelector('[name="exerciseId"]').value;
-    const setsEl = block.querySelector('[name="sets"]');
-    const repsEl = block.querySelector('[name="reps"]');
-    const weightEl = block.querySelector('[name="targetWeight"]');
-    const restEl = block.querySelector('[name="restInterval"]');
-    const durationEl = block.querySelector('[name="duration"]');
-
-    const sets = setsEl ? Number(setsEl.value) : 0;
-    const reps = repsEl ? Number(repsEl.value) : 0;
-    const targetWeight = weightEl ? Number(weightEl.value) : 0;
-    const restInterval = restEl ? Number(restEl.value) : 0;
-    const duration = durationEl ? Number(durationEl.value) : 0;
-
-    if (!exerciseId) {
-      document.getElementById('message').textContent = 'Please fill all required exercise fields.';
-      return;
-    }
-
-    exercises.push({ exerciseId, sets, reps, targetWeight, restInterval, duration });
-  }
+  const exercises = Array.from(form.querySelectorAll('.exercise-block')).map(block => ({
+    exerciseId: block.querySelector('[name="exerciseId"]').value,
+    sets: Number(block.querySelector('[name="sets"]').value) || 0,
+    reps: Number(block.querySelector('[name="reps"]').value) || 0,
+    targetWeight: Number(block.querySelector('[name="targetWeight"]').value) || 0,
+    restInterval: Number(block.querySelector('[name="restInterval"]').value) || 0,
+    duration: Number(block.querySelector('[name="duration"]').value) || 0,
+  }));
 
   const scheduleData = {
-    scheduleId: 's' + Date.now(),
     userId,
     dayOfWeek: data.dayOfWeek,
     scheduleTitle: data.scheduleTitle || '',
     exercises
   };
 
+  let url = 'http://localhost:3000/api/schedules';
+  let method = 'POST';
+
+  if (editingScheduleId) {
+    url = `http://localhost:3000/api/schedules/${editingScheduleId}`;
+    method = 'PUT';
+    scheduleData.scheduleId = editingScheduleId;
+  } else {
+    scheduleData.scheduleId = 's' + Date.now(); // ✅ Ensure it's set for new schedules
+  }
+
   try {
-    const response = await fetch('http://localhost:3000/api/schedules', {
-      method: 'POST',
+    const response = await fetch(url, {
+      method: method,
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(scheduleData)
     });
 
-    const result = await response.json();
     if (response.ok) {
-      document.getElementById('message').textContent = '✅ Schedule created!';
-      form.reset();
-      document.getElementById('exerciseList').innerHTML = '';
-      addExerciseBlock(); // Add one fresh block
+      window.location.href = 'workouts.html';
     } else {
+      const result = await response.json();
       document.getElementById('message').textContent = `Error: ${result.error}`;
     }
   } catch (err) {

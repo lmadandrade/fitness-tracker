@@ -7,24 +7,21 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-// Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('✅ MongoDB connected'))
   .catch((err) => console.error('❌ MongoDB connection error:', err));
 
-// Basic route
 app.get('/', (req, res) => {
   res.send('👋 Fitness Tracker API Running');
 });
 
-// Import models
 const User = require('./models/userProfile');
 const Exercise = require('./models/exerciseLibrary');
 const WorkoutSchedule = require('./models/workoutSchedule');
 const WorkoutLog = require('./models/workoutLog');
 const CheckInLog = require('./models/checkInLog');
 
-// Create a user
+// User routes
 app.post('/api/users', async (req, res) => {
   try {
     const newUser = await User.create(req.body);
@@ -33,18 +30,6 @@ app.post('/api/users', async (req, res) => {
     res.status(400).json({ error: err.message });
   }
 });
-
-// Get all users
-app.get('/api/users', async (req, res) => {
-  try {
-    const users = await User.find();
-    res.json(users);
-  } catch (err) {
-    res.status(500).json({ error: 'Failed to fetch users' });
-  }
-});
-
-// Get user by userId
 app.get('/api/users/:userId', async (req, res) => {
   const { userId } = req.params;
   try {
@@ -55,8 +40,6 @@ app.get('/api/users/:userId', async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch user' });
   }
 });
-
-// Update user
 app.put('/api/users/update', async (req, res) => {
   const { userId, ...updateData } = req.body;
   if (!userId) return res.status(400).json({ error: 'userId is required for update' });
@@ -69,7 +52,7 @@ app.put('/api/users/update', async (req, res) => {
   }
 });
 
-// Create exercise
+// Exercise routes
 app.post('/api/exercises', async (req, res) => {
   try {
     const newExercise = await Exercise.create(req.body);
@@ -78,8 +61,6 @@ app.post('/api/exercises', async (req, res) => {
     res.status(400).json({ error: err.message });
   }
 });
-
-// Get all exercises for a user
 app.get('/api/exercises', async (req, res) => {
   const userId = req.query.userId;
   if (!userId) return res.status(400).json({ error: 'Missing userId' });
@@ -90,8 +71,6 @@ app.get('/api/exercises', async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch exercises' });
   }
 });
-
-// ✅ Update exercise by exerciseId
 app.put('/api/exercises/:exerciseId', async (req, res) => {
   const { exerciseId } = req.params;
   try {
@@ -102,8 +81,6 @@ app.put('/api/exercises/:exerciseId', async (req, res) => {
     res.status(500).json({ error: 'Failed to update exercise' });
   }
 });
-
-// ✅ Delete exercise by exerciseId
 app.delete('/api/exercises/:exerciseId', async (req, res) => {
   const { exerciseId } = req.params;
   try {
@@ -115,7 +92,7 @@ app.delete('/api/exercises/:exerciseId', async (req, res) => {
   }
 });
 
-// Create workout schedule
+// Schedule routes
 app.post('/api/schedules', async (req, res) => {
   try {
     const newSchedule = await WorkoutSchedule.create(req.body);
@@ -124,8 +101,6 @@ app.post('/api/schedules', async (req, res) => {
     res.status(400).json({ error: err.message });
   }
 });
-
-// Get all workout schedules
 app.get('/api/schedules', async (req, res) => {
   const userId = req.query.userId;
   if (!userId) return res.status(400).json({ error: 'Missing userId' });
@@ -136,8 +111,6 @@ app.get('/api/schedules', async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch workout schedules' });
   }
 });
-
-// Get schedule by scheduleId
 app.get('/api/schedules/:id', async (req, res) => {
   try {
     const schedule = await WorkoutSchedule.findOne({ scheduleId: req.params.id });
@@ -147,8 +120,26 @@ app.get('/api/schedules/:id', async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch schedule' });
   }
 });
+app.put('/api/schedules/:id', async (req, res) => {
+  try {
+    const updatedSchedule = await WorkoutSchedule.findOneAndUpdate({ scheduleId: req.params.id }, req.body, { new: true });
+    if (!updatedSchedule) return res.status(404).json({ error: 'Schedule not found' });
+    res.json(updatedSchedule);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+app.delete('/api/schedules/:id', async (req, res) => {
+  try {
+    const deleted = await WorkoutSchedule.findOneAndDelete({ scheduleId: req.params.id });
+    if (!deleted) return res.status(404).json({ error: 'Schedule not found' });
+    res.json({ message: 'Schedule deleted successfully' });
+  } catch (err) {
+    res.status(500).json({ error: 'Error deleting schedule' });
+  }
+});
 
-// Create workout log
+// Workout Log routes
 app.post('/api/workouts', async (req, res) => {
   try {
     const newLog = await WorkoutLog.create(req.body);
@@ -157,8 +148,6 @@ app.post('/api/workouts', async (req, res) => {
     res.status(400).json({ error: err.message });
   }
 });
-
-// Get all workout logs
 app.get('/api/workouts', async (req, res) => {
   const userId = req.query.userId;
   if (!userId) return res.status(400).json({ error: 'Missing userId' });
@@ -169,8 +158,17 @@ app.get('/api/workouts', async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch workout logs' });
   }
 });
+app.delete('/api/workouts/:logId', async (req, res) => {
+    try {
+      const deleted = await WorkoutLog.findOneAndDelete({ logId: req.params.logId });
+      if (!deleted) return res.status(404).json({ error: 'Workout log not found' });
+      res.json({ message: 'Workout log deleted successfully' });
+    } catch (err) {
+      res.status(500).json({ error: 'Error deleting workout log' });
+    }
+});
 
-// Create check-in log
+// Check-in routes
 app.post('/api/checkins', async (req, res) => {
   try {
     const newCheckIn = await CheckInLog.create(req.body);
@@ -179,8 +177,6 @@ app.post('/api/checkins', async (req, res) => {
     res.status(400).json({ error: err.message });
   }
 });
-
-// Get check-in logs
 app.get('/api/checkins', async (req, res) => {
   const userId = req.query.userId;
   if (!userId) return res.status(400).json({ error: 'Missing userId' });
@@ -192,7 +188,6 @@ app.get('/api/checkins', async (req, res) => {
   }
 });
 
-// Start server
 app.listen(3000, () => {
-  console.log('🚀 Server running on http://localhost:3000');
+  console.log('🚀 Server running on http://localhost:3000' );
 });
