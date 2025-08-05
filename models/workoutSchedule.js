@@ -11,12 +11,12 @@ const workoutScheduleSchema = new mongoose.Schema({
   scheduleTitle: { type: String, default: '' },
   exercises: [
     {
-      exerciseId: { type: String, required: true }, // reference to ExerciseLibrary
+      exerciseId: { type: String, required: true }, 
       sets: { type: Number },
       reps: { type: Number },
       targetWeight: { type: Number },
-      restInterval: { type: Number }, // in seconds
-      duration: { type: Number } // in minutes (used for cardio)
+      restInterval: { type: Number }, 
+      duration: { type: Number }
     }
   ]
 }, { timestamps: true });

@@ -1,17 +1,12 @@
-/* 
- * FitTracker CSS Stylesheet
- * Simple and clean styling for fitness tracking web app
- * Created for Web Application Development project
- */
 
-/* Reset default browser styles */
+
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
-/* Basic page styling */
+/* basic page styling */
 body {
   font-family: Arial, sans-serif;
   background-color: #f5f5f5;
@@ -19,7 +14,7 @@ body {
   line-height: 1.5;
 }
 
-/* Top header bar with site title and logout */
+/* top header bar with title and logout button */
 .site-header {
   background-color: #2c3e50;
   color: white;
@@ -33,7 +28,7 @@ body {
   font-size: 1.8rem;
 }
 
-/* Logout button styling */
+/* logout button */
 .logout-btn {
   padding: 8px 16px;
   border: none;
@@ -47,13 +42,13 @@ body {
   background-color: #c0392b;
 }
 
-/* Main layout container - sidebar + content */
+/* main layout container / sidebar / content */
 .wrapper {
   display: flex;
   min-height: calc(100vh - 70px);
 }
 
-/* Left sidebar navigation */
+/* left menu nav */
 nav {
   width: 220px;
   background-color: #ecf0f1;
@@ -61,7 +56,7 @@ nav {
   border-right: 1px solid #bdc3c7;
 }
 
-/* Navigation links */
+/* links section */
 nav a {
   display: block;
   padding: 12px 15px;
@@ -75,7 +70,7 @@ nav a:hover {
   background-color: #d5dbdb;
 }
 
-/* Active page highlight */
+/* page highlight */
 nav a.active {
   background-color: #3498db;
   color: white;
@@ -106,7 +101,7 @@ main p {
   color: #555;
 }
 
-/* White content cards */
+/* white content cards */
 .card {
   background-color: white;
   padding: 25px;
@@ -125,7 +120,7 @@ main p {
   margin: 15px 0 10px 0;
 }
 
-/* Form container styling */
+/* Form styling */
 form {
   background-color: white;
   padding: 25px;
@@ -169,7 +164,7 @@ form {
   min-height: 80px;
 }
 
-/* Button styling - keeps existing functionality */
+/* button styling */
 button {
   padding: 10px 15px;
   border: none;
@@ -208,14 +203,14 @@ button:disabled {
   margin: 20px 0;
 }
 
-/* Two column layout helper */
+/* two column layout helper */
 .two-col {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 20px;
 }
 
-/* Message display area */
+/* message display area */
 .message-container {
   margin-top: 10px;
   padding: 10px;
@@ -223,13 +218,13 @@ button:disabled {
   font-weight: bold;
 }
 
-/* Range slider styling */
+/* slider styling */
 input[type="range"] {
   width: 100%;
   margin: 10px 0;
 }
 
-/* Custom checkbox styling for skip workout feature */
+/* checkbox for skip workout feature */
 .checkbox-label {
   display: flex;
   align-items: center;
@@ -268,7 +263,7 @@ input[type="range"] {
   border-color: #3498db;
 }
 
-/* Checkmark icon */
+/* checkmark icon */
 .checkmark:after {
   content: "";
   position: absolute;
@@ -308,7 +303,7 @@ input[type="range"] {
   color: #2c3e50;
 }
 
-/* Exercise input grid layout */
+/* exercise input layout */
 .exercise-input-grid {
   display: grid;
   grid-template-columns: 1fr 2fr;
@@ -321,7 +316,7 @@ input[type="range"] {
   gap: 10px;
 }
 
-/* Input group for exercise data */
+/* input group for exersise data */
 .input-group {
   display: flex;
   flex-direction: column;
@@ -339,7 +334,7 @@ input[type="range"] {
   border-radius: 3px;
 }
 
-/* Remove button for exercises */
+/* Remove button for exersises */
 .remove-btn {
   background: none;
   border: none;
@@ -372,7 +367,7 @@ input[type="range"] {
   color: #555;
 }
 
-/* Data grid for measurements */
+/* grid for measurements */
 .data-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -385,7 +380,7 @@ input[type="range"] {
   color: #666;
 }
 
-/* Note section styling */
+/* Note section */
 .note-section {
   margin: 10px 0;
   padding: 10px;
@@ -395,7 +390,7 @@ input[type="range"] {
   font-style: italic;
 }
 
-/* Empty state messages */
+/* empty state messages */
 .no-data,
 .error-message {
   text-align: center;
@@ -407,14 +402,13 @@ input[type="range"] {
   border: 1px solid #ddd;
 }
 
-/* Mobile responsive design */
+/* Mobile design */
 @media (max-width: 768px) {
-  /* Stack sidebar and content vertically on mobile */
   .wrapper {
     flex-direction: column;
   }
   
-  /* Make navigation horizontal on mobile */
+  /* Make nav horizontal on mobile */
   nav {
     width: 100%;
     padding: 10px;
@@ -430,7 +424,7 @@ input[type="range"] {
     margin-bottom: 0;
   }
   
-  /* Reduce padding on mobile */
+  /* less padding on mobile */
   main {
     padding: 15px;
   }
@@ -451,13 +445,13 @@ input[type="range"] {
     grid-template-columns: repeat(2, 1fr);
   }
   
-  /* Reduce form padding on mobile */
+  /* less form padding on mobile */
   form {
     padding: 15px;
   }
 }
 
-/* Very small screens */
+/* for small screens */
 @media (max-width: 480px) {
   .site-header {
     padding: 10px;
@@ -475,7 +469,7 @@ input[type="range"] {
     font-size: 1.5rem;
   }
   
-  /* Single column for exercise inputs on very small screens */
+  /* one column for exercise fields on very small screens */
   .exercise-inputs {
     grid-template-columns: 1fr;
   }
@@ -483,7 +477,7 @@ input[type="range"] {
 
 
 
-/* Two-column layout for planned vs. actual exercises */
+/* Two column layout for planned and. actual exercises */
 .two-col-exercise {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -507,7 +501,7 @@ input[type="range"] {
   margin-bottom: 5px;
 }
 
-/* Responsive adjustments for exercise two-column layout */
+/*   for exercise twocolumn layout */
 @media (max-width: 768px) {
   .two-col-exercise {
     grid-template-columns: 1fr;

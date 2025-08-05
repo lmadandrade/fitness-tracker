@@ -2,10 +2,10 @@ const mongoose = require('mongoose');
 
 const exerciseLibrarySchema = new mongoose.Schema({
   exerciseId: { type: String, required: true, unique: true },
-  userId: { type: String, default: null }, // null for preloaded
+  userId: { type: String, default: null }, 
   name: { type: String, required: true },
-  muscleGroup: { type: String, required: true }, // e.g., chest, legs
-  equipment: { type: String, required: true },   // e.g., barbell, dumbbell
+  muscleGroup: { type: String, required: true }, 
+  equipment: { type: String, required: true },  
   type: {
     type: String,
     enum: ['compound', 'isolation', 'cardio', 'stretch'],
